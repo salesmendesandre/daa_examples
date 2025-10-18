@@ -9,3 +9,13 @@
   margin-bottom: 1rem;
   color: #f11313;
 }
+
+
+.component {
+  display: block;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
