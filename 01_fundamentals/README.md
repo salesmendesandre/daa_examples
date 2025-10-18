@@ -1,5 +1,7 @@
 # 01 - Fundamentos de React
 
+<img src="https://salesmendesandre.github.io/daa_book/main/_static/cover.png" width="300"/>
+
 Este proyecto contiene ejemplos básicos de componentes en React, diseñados para ilustrar conceptos fundamentales del desarrollo de aplicaciones web modernas.
 
 ## 📚 Material de Apoyo
