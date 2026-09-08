@@ -1,0 +1,12 @@
+{
+  "name": "00_fundamentos_javascript",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Fundamentos de JavaScript moderno (ES6+) para desarrollo backend",
+  "scripts": {
+    "start": "node src/main.js",
+    "dev": "node --watch src/main.js",
+    "test": "node --test"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "daa-examples",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Ejemplos prácticos de Desarrollo de Aplicaciones Avanzadas (DAA) - APIs REST con Express 5, TypeScript y MongoDB",
+  "author": "André Filipe Sales Mendes <andremendes@usal.es>",
+  "license": "MIT",
+  "workspaces": [
+    "00_fundamentos_javascript",
+    "01_fundamentos_express_ts"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}
