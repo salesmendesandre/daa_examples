@@ -7,7 +7,8 @@
   "license": "MIT",
   "workspaces": [
     "00_fundamentos_javascript",
-    "01_fundamentos_express_ts"
+    "01_fundamentos_express_ts",
+    "02_diseno_rest_arquitectura"
   ],
   "scripts": {
     "build": "npm run build --workspaces --if-present",
