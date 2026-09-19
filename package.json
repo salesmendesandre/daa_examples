@@ -8,7 +8,8 @@
   "workspaces": [
     "00_fundamentos_javascript",
     "01_fundamentos_express_ts",
-    "02_diseno_rest_arquitectura"
+    "02_diseno_rest_arquitectura",
+    "05_persistencia_mongodb_mongoose"
   ],
   "scripts": {
     "build": "npm run build --workspaces --if-present",
