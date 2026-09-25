@@ -3,7 +3,7 @@ import { consultarDocumentosParalelo } from "./02_asincronia.js";
 import { ContactStore } from "./03_memory_store.js";
 
 async function main() {
-  console.log("=== 00: FUNDAMENTOS DE JAVASCRIPT MODERNO ===");
+  console.log("=== SEMANA 1 - SESIÓN 1: FUNDAMENTOS DE JAVASCRIPT MODERNO ===");
 
   console.log("\n1. Transformación de usuarios:");
   const limpios = limpiarUsuarios(usuariosEjemplo);

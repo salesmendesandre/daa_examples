@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Fundamentos de JavaScript moderno (ES6+) para desarrollo backend",
+  "description": "Fundamentos de JavaScript moderno (ES6+) para desarrollo backend, incluye los ejercicios resueltos",
   "scripts": {
     "start": "node src/main.js",
     "dev": "node --watch src/main.js",
+    "ejercicios": "node src/ejercicios/main.js",
+    "ejercicios:dev": "node --watch src/ejercicios/main.js",
     "test": "node --test"
   }
 }
