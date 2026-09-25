@@ -18,7 +18,10 @@ El código está organizado de forma modular, con un proyecto independiente por 
 | [`00_fundamentos_javascript/`](./00_fundamentos_javascript/) | Fundamentos de JavaScript | ES6+, Métodos funcionales, `async`/`await`, Closures, Memory Store |
 | [`01_fundamentos_express_ts/`](./01_fundamentos_express_ts/) | 1. Fundamentos de APIs y Express 5 | Express 5, TypeScript, Tipado estricto, TSX, CRUD en memoria |
 | [`02_diseno_rest_arquitectura/`](./02_diseno_rest_arquitectura/) | 2. Diseño REST y Arquitectura en Capas | Routers, Controllers, Services, In-Memory Repository, Separación de responsabilidades |
-| [`05_persistencia_mongodb_mongoose/`](./05_persistencia_mongodb_mongoose/) | 3. Persistencia con MongoDB y Mongoose | MongoDB, Mongoose, Esquemas tipados, Conexión a base de datos, CRUD persistente |
+| [`03_validacion_zod_errores/`](./03_validacion_zod_errores/) | 3. Validación con Zod y Manejo de Errores | Zod schemas, Inferencia de tipos (`z.infer`), Middlewares de validación, `AppError`, Manejador global Express 5 |
+| [`04_documentacion_openapi_swagger/`](./04_documentacion_openapi_swagger/) | 4. Documentación con OpenAPI / Swagger | Swagger UI Express, OpenAPI 3.0 JSON specification, Documentación interactiva `/api/docs` |
+| [`05_persistencia_mongodb_mongoose/`](./05_persistencia_mongodb_mongoose/) | 5. Persistencia con MongoDB y Mongoose | MongoDB, Mongoose, Esquemas tipados, Conexión a base de datos, CRUD persistente |
+| [`07_seguridad_observabilidad/`](./07_seguridad_observabilidad/) | 6. Seguridad y Observabilidad | Helmet (cabeceras HTTP seguras), CORS, Rate Limiting (`express-rate-limit`), Logger estructurado (Pino) |
 
 ---
 

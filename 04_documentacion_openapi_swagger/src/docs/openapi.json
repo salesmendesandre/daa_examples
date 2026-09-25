@@ -1,0 +1,122 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "DocuMind API - Especificación Formal",
+    "version": "1.0.0",
+    "description": "API REST para gestión de documentos, búsqueda semántica y RAG desarrollada con Express 5 y TypeScript."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api",
+      "description": "Servidor de Desarrollo Local"
+    }
+  ],
+  "paths": {
+    "/documents": {
+      "get": {
+        "summary": "Listar documentos",
+        "description": "Recupera la lista de documentos con soporte para filtrado opcional por etiqueta.",
+        "tags": ["Documentos"],
+        "parameters": [
+          {
+            "name": "tag",
+            "in": "query",
+            "required": false,
+            "description": "Filtrar por etiqueta concreta",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Listado recuperado satisfactoriamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "count": { "type": "integer", "example": 2 },
+                    "data": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/Document" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Crear un nuevo documento",
+        "tags": ["Documentos"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateDocumentPayload" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Documento creado satisfactoriamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "data": { "$ref": "#/components/schemas/Document" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Payload no válido o campos requeridos omitidos",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Document": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "title": { "type": "string", "example": "Clean Code en TypeScript" },
+          "content": { "type": "string", "example": "Contenido del documento..." },
+          "author": { "type": "string", "example": "Robert C. Martin" },
+          "tags": { "type": "array", "items": { "type": "string" }, "example": ["typescript", "clean-code"] },
+          "createdAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "CreateDocumentPayload": {
+        "type": "object",
+        "required": ["title", "content", "author"],
+        "properties": {
+          "title": { "type": "string", "minLength": 3, "maxLength": 120 },
+          "content": { "type": "string", "minLength": 10 },
+          "author": { "type": "string", "minLength": 2 },
+          "tags": { "type": "array", "items": { "type": "string" }, "default": [] }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "example": "fail" },
+          "error": { "type": "string", "example": "ValidationError" },
+          "message": { "type": "string" },
+          "details": { "type": "array", "items": { "type": "object" } }
+        }
+      }
+    }
+  }
+}

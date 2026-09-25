@@ -1,0 +1,24 @@
+{
+  "name": "04_documentacion_openapi_swagger",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Documentación interactiva de APIs con OpenAPI 3.0 y Swagger UI en Express 5",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "start": "node dist/server.js"
+  },
+  "dependencies": {
+    "express": "^5.0.1",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.9.0",
+    "@types/swagger-ui-express": "^4.1.7",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}

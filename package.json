@@ -9,7 +9,10 @@
     "00_fundamentos_javascript",
     "01_fundamentos_express_ts",
     "02_diseno_rest_arquitectura",
-    "05_persistencia_mongodb_mongoose"
+    "03_validacion_zod_errores",
+    "04_documentacion_openapi_swagger",
+    "05_persistencia_mongodb_mongoose",
+    "07_seguridad_observabilidad"
   ],
   "scripts": {
     "build": "npm run build --workspaces --if-present",
