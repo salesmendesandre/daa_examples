@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Persistencia de datos con MongoDB y Mongoose en TypeScript",
+  "description": "Persistencia de datos con MongoDB y Mongoose en TypeScript (Documents) + ejercicios resueltos de Cursos Universitarios (validación de ObjectId, subdocumentos anidados y soft delete)",
   "scripts": {
-    "dev": "tsx watch src/app.ts",
+    "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "typecheck": "tsc --noEmit",
-    "start": "node dist/app.js"
+    "start": "node dist/server.js"
   },
   "dependencies": {
     "dotenv": "^16.4.5",

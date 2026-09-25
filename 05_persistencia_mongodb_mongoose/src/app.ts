@@ -1,21 +1,18 @@
-import express from "express";
-import { connectDB } from "./config/database.js";
+import express, { Request, Response } from "express";
 import documentsRoutes from "./routes/documents.routes.js";
+import coursesRoutes from "./routes/courses.routes.js";
 
 export const app = express();
-const PORT = process.env.PORT || 3005;
 
 app.use(express.json());
-app.use("/api/documents", documentsRoutes);
 
-app.get("/health", (req, res) => {
-  res.json({ status: "ok", service: "MongoDB Mongoose API" });
+app.get("/health", (req: Request, res: Response) => {
+  res.status(200).json({ status: "ok", service: "Persistencia con MongoDB y Mongoose" });
 });
 
-if (process.env.NODE_ENV !== "test") {
-  connectDB().then(() => {
-    app.listen(PORT, () => {
-      console.log(`[MongoDB API] Servidor escuchando en http://localhost:${PORT}`);
-    });
-  });
-}
+// CONTENIDO: Persistencia con MongoDB y Mongoose (Documents)
+app.use("/api/documents", documentsRoutes);
+
+// EJERCICIOS (Ej.1 middleware validateObjectId, Ej.2 subdocumentos anidados,
+// Ej.3 soft delete): Cursos Universitarios, mismo patrón que Documents.
+app.use("/api/courses", coursesRoutes);
