@@ -1,20 +1,17 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import documentsRoutes from "./routes/documents.routes.js";
+import ticketsRoutes from "./routes/tickets.routes.js";
 
 export const app = express();
-const PORT = process.env.PORT || 3001;
 
 app.use(express.json());
 
-// Registro de rutas modulares
-app.use("/api/documents", documentsRoutes);
-
-app.get("/health", (req, res) => {
-  res.json({ status: "ok", service: "DocuMind Layered API" });
+app.get("/health", (req: Request, res: Response) => {
+  res.status(200).json({ status: "ok", service: "Arquitectura Modular en Capas" });
 });
 
-if (process.env.NODE_ENV !== "test") {
-  app.listen(PORT, () => {
-    console.log(`[Layered API] Servidor escuchando en http://localhost:${PORT}`);
-  });
-}
+// CONTENIDO DE LA SESIÓN: Diseño RESTful y Arquitectura en Tres Capas (Documents)
+app.use("/api/documents", documentsRoutes);
+
+// EJERCICIOS CORREGIDOS (Sesión 2): Sistema de Tickets (mismo patrón, otro dominio)
+app.use("/api/tickets", ticketsRoutes);

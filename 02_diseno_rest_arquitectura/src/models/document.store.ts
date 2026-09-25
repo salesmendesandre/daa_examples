@@ -1,3 +1,9 @@
+/* ============================================================================
+ * CONTENIDO DE LA SESIÓN — Capa de MODELO (persistencia en memoria)
+ * Sustituible mañana por MongoDB/Mongoose sin tocar el resto de capas:
+ * ese es el objetivo de aislar el acceso a datos aquí dentro.
+ * ========================================================================== */
+
 import { DocumentItem, CreateDocumentInput, UpdateDocumentInput } from "../types/document.types.js";
 
 class DocumentStore {

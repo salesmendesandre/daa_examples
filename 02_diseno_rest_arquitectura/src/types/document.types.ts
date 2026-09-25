@@ -1,3 +1,5 @@
+// CONTENIDO DE LA SESIÓN
+
 export interface DocumentItem {
   id: number;
   title: string;

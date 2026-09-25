@@ -1,46 +1,52 @@
+/* ============================================================================
+ * CONTENIDO DE LA SESIÓN — Capa de SERVICIO
+ * Reglas de negocio 100% agnósticas de Express: nada de req/res aquí, solo
+ * datos y lógica. Esto es lo que se testea sin levantar un servidor HTTP.
+ * Comunica errores de negocio como Error("CODIGO:mensaje") que el controlador
+ * interpreta y traduce al código HTTP correspondiente.
+ * ========================================================================== */
+
 import { documentStore } from "../models/document.store.js";
 import { DocumentItem, CreateDocumentInput, UpdateDocumentInput } from "../types/document.types.js";
 
-export const findAll = (tag?: string, sort?: string): DocumentItem[] => {
-  let docs = documentStore.findAll();
-
-  // Filtrado por etiqueta
-  if (tag) {
-    const t = tag.toLowerCase();
-    docs = docs.filter(d => d.tags.includes(t));
+export class DocumentsService {
+  getAllDocuments(tag?: string): DocumentItem[] {
+    const all = documentStore.findAll();
+    if (!tag) return all;
+    const normalizedTag = tag.trim().toLowerCase();
+    return all.filter(doc => doc.tags.some(t => t.toLowerCase() === normalizedTag));
   }
 
-  // Ordenación dinámica (+campo o -campo para descendente)
-  if (sort) {
-    const isDesc = sort.startsWith("-");
-    const field = (isDesc ? sort.slice(1) : sort) as keyof DocumentItem;
+  getDocumentById(id: number): DocumentItem {
+    const doc = documentStore.findById(id);
+    if (!doc) {
+      throw new Error(`DOCUMENT_NOT_FOUND:${id}`);
+    }
+    return doc;
+  }
 
-    if (field === "title" || field === "createdAt") {
-      docs = [...docs].sort((a, b) => {
-        const valA = String(a[field]);
-        const valB = String(b[field]);
-        if (valA < valB) return isDesc ? 1 : -1;
-        if (valA > valB) return isDesc ? -1 : 1;
-        return 0;
-      });
+  createDocument(input: CreateDocumentInput): DocumentItem {
+    if (!input.title || !input.content || !input.author) {
+      throw new Error("INVALID_DATA:title, content and author are required");
+    }
+    return documentStore.create(input);
+  }
+
+  // PATCH, no PUT: actualización PARCIAL (ver sección 5 del capítulo, PUT vs PATCH).
+  updateDocument(id: number, input: UpdateDocumentInput): DocumentItem {
+    const updated = documentStore.update(id, input);
+    if (!updated) {
+      throw new Error(`DOCUMENT_NOT_FOUND:${id}`);
+    }
+    return updated;
+  }
+
+  deleteDocument(id: number): void {
+    const deleted = documentStore.delete(id);
+    if (!deleted) {
+      throw new Error(`DOCUMENT_NOT_FOUND:${id}`);
     }
   }
+}
 
-  return docs;
-};
-
-export const findById = (id: number): DocumentItem | null => {
-  return documentStore.findById(id);
-};
-
-export const create = (input: CreateDocumentInput): DocumentItem => {
-  return documentStore.create(input);
-};
-
-export const update = (id: number, input: UpdateDocumentInput): DocumentItem | null => {
-  return documentStore.update(id, input);
-};
-
-export const remove = (id: number): boolean => {
-  return documentStore.delete(id);
-};
+export const documentsService = new DocumentsService();

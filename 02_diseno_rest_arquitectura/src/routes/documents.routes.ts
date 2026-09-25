@@ -1,12 +1,18 @@
+/* ============================================================================
+ * CONTENIDO DE LA SESIÓN — Capa de ENRUTAMIENTO
+ * Solo asigna URI + verbo HTTP -> método del controlador. Cero lógica aquí.
+ * PATCH y no PUT: en este capítulo el "update" es siempre parcial.
+ * ========================================================================== */
+
 import { Router } from "express";
-import * as docsCtrl from "../controllers/documents.controller.js";
+import { documentsController } from "../controllers/documents.controller.js";
 
 const router = Router();
 
-router.get("/", docsCtrl.getAllDocuments);
-router.get("/:id", docsCtrl.getDocumentById);
-router.post("/", docsCtrl.createDocument);
-router.put("/:id", docsCtrl.updateDocument);
-router.delete("/:id", docsCtrl.deleteDocument);
+router.get("/", documentsController.getAll);
+router.get("/:id", documentsController.getById);
+router.post("/", documentsController.create);
+router.patch("/:id", documentsController.update);
+router.delete("/:id", documentsController.delete);
 
 export default router;
