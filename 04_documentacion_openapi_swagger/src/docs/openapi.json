@@ -83,9 +83,87 @@
           }
         }
       }
+    },
+    "/books": {
+      "get": {
+        "summary": "Listar libros del catálogo",
+        "tags": ["Libros"],
+        "responses": {
+          "200": {
+            "description": "Listado recuperado satisfactoriamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "count": { "type": "integer", "example": 1 },
+                    "data": { "type": "array", "items": { "$ref": "#/components/schemas/Book" } }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Registrar un nuevo libro",
+        "tags": ["Libros"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateBookPayload" } } }
+        },
+        "responses": {
+          "201": { "description": "Libro registrado con éxito" },
+          "400": {
+            "description": "Payload no válido",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } }
+          },
+          "401": {
+            "description": "Token de autenticación ausente o no válido",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } }
+          }
+        }
+      }
+    },
+    "/books/{isbn}": {
+      "get": {
+        "summary": "Obtener libro por ISBN",
+        "description": "Recupera los datos bibliográficos de una obra a partir de su código ISBN normalizado.",
+        "tags": ["Libros"],
+        "parameters": [
+          {
+            "name": "isbn",
+            "in": "path",
+            "required": true,
+            "description": "Código ISBN-10 o ISBN-13",
+            "schema": { "type": "string" },
+            "example": "978-0132350884"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Libro encontrado con éxito",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Book" } } }
+          },
+          "404": {
+            "description": "No se encontró ningún libro con el ISBN indicado",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } }
+          }
+        }
+      }
     }
   },
   "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Introduce tu token JWT en el formato: Bearer <token> (verificación real de la firma a partir del capítulo de autenticación; aquí solo se comprueba que la cabecera existe)."
+      }
+    },
     "schemas": {
       "Document": {
         "type": "object",
@@ -115,6 +193,28 @@
           "error": { "type": "string", "example": "ValidationError" },
           "message": { "type": "string" },
           "details": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "Book": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "isbn": { "type": "string", "example": "978-0132350884" },
+          "title": { "type": "string", "example": "Clean Code" },
+          "authors": { "type": "array", "items": { "type": "string" }, "example": ["Robert C. Martin"] },
+          "publishedYear": { "type": "integer", "example": 2008, "minimum": 1450 },
+          "availableCopies": { "type": "integer", "example": 3, "minimum": 0 }
+        }
+      },
+      "CreateBookPayload": {
+        "type": "object",
+        "required": ["isbn", "title", "authors", "publishedYear"],
+        "properties": {
+          "isbn": { "type": "string", "example": "978-0134685991" },
+          "title": { "type": "string", "minLength": 2, "example": "Effective Java" },
+          "authors": { "type": "array", "items": { "type": "string" }, "minItems": 1, "example": ["Joshua Bloch"] },
+          "publishedYear": { "type": "integer", "minimum": 1450, "maximum": 2026, "example": 2018 },
+          "availableCopies": { "type": "integer", "minimum": 0, "default": 1 }
         }
       }
     }

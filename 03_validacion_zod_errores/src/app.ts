@@ -2,6 +2,7 @@ import express from "express";
 import { validateBody } from "./middlewares/validate.middleware.js";
 import { notFoundHandler, globalErrorHandler } from "./middlewares/error.middleware.js";
 import { CreateDocumentSchema } from "./schemas/document.schema.js";
+import transfersRoutes from "./routes/transfers.routes.js";
 
 export const app = express();
 
@@ -15,6 +16,9 @@ app.post("/api/documents", validateBody(CreateDocumentSchema), (req, res) => {
     data: req.body
   });
 });
+
+// EJERCICIOS: Sistema de Transferencias Bancarias:
+app.use("/api/transfers", transfersRoutes);
 
 // Captura de rutas inexistentes y manejador global de errores (siempre al final, en este orden):
 app.use(notFoundHandler);
