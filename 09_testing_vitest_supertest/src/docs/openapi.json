@@ -1,0 +1,72 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "DocuMind API - Testing con Vitest y Supertest",
+    "version": "1.0.0",
+    "description": "Capítulo 9. Documents es la API sobre la que corre la suite de integración de tests/integration/documents.api.test.ts."
+  },
+  "servers": [
+    { "url": "http://localhost:3009/api", "description": "Servidor de desarrollo local" }
+  ],
+  "tags": [
+    { "name": "Documents", "description": "API testeable" }
+  ],
+  "paths": {
+    "/documents": {
+      "get": {
+        "summary": "Listar documentos",
+        "tags": ["Documents"],
+        "responses": { "200": { "description": "Listado", "content": { "application/json": { "schema": { "type": "object", "properties": { "status": { "type": "string", "example": "success" }, "count": { "type": "integer" }, "data": { "type": "array", "items": { "$ref": "#/components/schemas/Document" } } } } } } } }
+      },
+      "post": {
+        "summary": "Crear un documento",
+        "tags": ["Documents"],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateDocumentPayload" } } } },
+        "responses": {
+          "201": { "description": "Creado", "content": { "application/json": { "schema": { "type": "object", "properties": { "status": { "type": "string", "example": "success" }, "data": { "$ref": "#/components/schemas/Document" } } } } } },
+          "400": { "description": "Título de menos de 3 caracteres o sin autor (ValidationError)", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    },
+    "/documents/{id}": {
+      "get": {
+        "summary": "Obtener documento por ID",
+        "tags": ["Documents"],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" }, "example": 1 }],
+        "responses": {
+          "200": { "description": "Encontrado", "content": { "application/json": { "schema": { "type": "object", "properties": { "status": { "type": "string" }, "data": { "$ref": "#/components/schemas/Document" } } } } } },
+          "404": { "description": "No existe", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Document": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "title": { "type": "string", "example": "Arquitectura Hexagonal" },
+          "author": { "type": "string", "example": "Alistair Cockburn" }
+        }
+      },
+      "CreateDocumentPayload": {
+        "type": "object",
+        "required": ["title", "author"],
+        "properties": {
+          "title": { "type": "string", "minLength": 3, "example": "Patrones de Diseño en TypeScript" },
+          "author": { "type": "string", "example": "Gang of Four" }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "example": "fail" },
+          "error": { "type": "string", "example": "ValidationError" },
+          "message": { "type": "string" },
+          "details": { "type": "array", "items": { "type": "object" } }
+        }
+      }
+    }
+  }
+}

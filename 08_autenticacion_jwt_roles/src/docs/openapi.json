@@ -1,0 +1,166 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "DocuMind API - Autenticación JWT + RBAC",
+    "version": "1.0.0",
+    "description": "Registro, login (bcrypt + JWT), perfil autenticado y un endpoint restringido por rol. Para probar las rutas protegidas: haz login, copia el 'token' de la respuesta y pégalo en el botón Authorize."
+  },
+  "servers": [
+    { "url": "http://localhost:3008/api", "description": "Servidor de desarrollo local" }
+  ],
+  "tags": [
+    { "name": "Auth", "description": "Registro y login con bcrypt + JWT" },
+    { "name": "Users", "description": "Endpoints autenticados y restringidos por rol" }
+  ],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "summary": "Registrar un usuario (bcrypt costo 10)",
+        "tags": ["Auth"],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/RegisterPayload" } } }
+        },
+        "responses": {
+          "201": {
+            "description": "Usuario registrado; devuelve el token firmado",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AuthResponse" } } }
+          },
+          "400": { "description": "Payload no válido (Zod)", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
+          "409": { "description": "El email ya está registrado", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Iniciar sesión (bcrypt.compare) y obtener un JWT",
+        "tags": ["Auth"],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/LoginPayload" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Credenciales correctas; devuelve el token firmado",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AuthResponse" } } }
+          },
+          "400": { "description": "Payload no válido (Zod)", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
+          "401": { "description": "Credenciales inválidas", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    },
+    "/users/me": {
+      "get": {
+        "summary": "Perfil del usuario autenticado (solo AuthN)",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Perfil del usuario dueño del token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "data": { "$ref": "#/components/schemas/PublicUser" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "description": "Token ausente, inválido o caducado", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    },
+    "/admin/metrics": {
+      "get": {
+        "summary": "Métricas de administración (AuthN + RBAC: solo admin)",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Acceso concedido al rol admin",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "message": { "type": "string", "example": "Bienvenido al panel de administración" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "adminUser": { "type": "string", "example": "admin@usal.es" },
+                        "totalUsers": { "type": "integer", "example": 1 }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "description": "Token ausente, inválido o caducado", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
+          "403": { "description": "El rol del token no es admin", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Pega aquí SOLO el token (sin la palabra Bearer): Swagger UI añade 'Bearer ' por ti."
+      }
+    },
+    "schemas": {
+      "RegisterPayload": {
+        "type": "object",
+        "required": ["email", "password", "fullName"],
+        "properties": {
+          "email": { "type": "string", "format": "email", "example": "admin@usal.es" },
+          "password": { "type": "string", "example": "SecretPassword123" },
+          "fullName": { "type": "string", "minLength": 2, "example": "Profesor Admin" },
+          "role": { "type": "string", "enum": ["user", "admin"], "default": "user" }
+        }
+      },
+      "LoginPayload": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": { "type": "string", "format": "email", "example": "admin@usal.es" },
+          "password": { "type": "string", "example": "SecretPassword123" }
+        }
+      },
+      "PublicUser": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "example": "1" },
+          "email": { "type": "string", "example": "admin@usal.es" },
+          "fullName": { "type": "string", "example": "Profesor Admin" },
+          "role": { "type": "string", "enum": ["user", "admin"] }
+        }
+      },
+      "AuthResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "example": "success" },
+          "message": { "type": "string", "example": "Usuario registrado con éxito" },
+          "token": { "type": "string", "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." },
+          "user": { "$ref": "#/components/schemas/PublicUser" }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "example": "fail" },
+          "error": { "type": "string", "example": "Forbidden" },
+          "message": { "type": "string" },
+          "details": { "type": "array", "items": { "type": "object" } }
+        }
+      }
+    }
+  }
+}

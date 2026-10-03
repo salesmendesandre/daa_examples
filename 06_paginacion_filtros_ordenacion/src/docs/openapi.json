@@ -1,0 +1,84 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "DocuMind API - Paginación, Filtrado y Ordenación",
+    "version": "1.0.0",
+    "description": "Capítulo 6. Paginación offset con Promise.all, whitelist de ordenación y filtrado dinámico de Documents."
+  },
+  "servers": [
+    { "url": "http://localhost:3006/api", "description": "Servidor de desarrollo local" }
+  ],
+  "tags": [
+    { "name": "Documents", "description": "Paginación, filtro por tag/búsqueda y ordenación" }
+  ],
+  "paths": {
+    "/documents": {
+      "get": {
+        "summary": "Listar documentos paginados",
+        "tags": ["Documents"],
+        "parameters": [
+          { "name": "page", "in": "query", "schema": { "type": "integer", "minimum": 1, "default": 1 }, "description": "Si no es un número válido se usa 1" },
+          { "name": "limit", "in": "query", "schema": { "type": "integer", "minimum": 1, "maximum": 50, "default": 10 }, "description": "Se recorta al rango 1-50" },
+          { "name": "sort", "in": "query", "schema": { "type": "string", "example": "-createdAt" }, "description": "createdAt, title o author (con '-' delante = descendente). Cualquier otro campo se ignora (whitelist)" },
+          { "name": "tag", "in": "query", "schema": { "type": "string", "example": "nodejs" } },
+          { "name": "search", "in": "query", "schema": { "type": "string", "example": "técnico" }, "description": "Búsqueda en el título, sin distinguir mayúsculas" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Página de documentos con metadatos de navegación",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "data": { "type": "array", "items": { "$ref": "#/components/schemas/Document" } },
+                    "meta": { "$ref": "#/components/schemas/PaginationMeta" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Parámetro repetido (?tag=a&tag=b)", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Document": {
+        "type": "object",
+        "properties": {
+          "_id": { "type": "string", "example": "66d8e20f1a2b3c4d5e6f7a8b" },
+          "title": { "type": "string", "example": "Documento Técnico #1" },
+          "content": { "type": "string" },
+          "author": { "type": "string", "example": "André Mendes" },
+          "tags": { "type": "array", "items": { "type": "string" }, "example": ["nodejs", "api"] },
+          "createdAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "PaginationMeta": {
+        "type": "object",
+        "properties": {
+          "total": { "type": "integer", "example": 15 },
+          "page": { "type": "integer", "example": 1 },
+          "limit": { "type": "integer", "example": 10 },
+          "totalPages": { "type": "integer", "example": 2 },
+          "hasNextPage": { "type": "boolean", "example": true },
+          "hasPrevPage": { "type": "boolean", "example": false },
+          "next": { "type": "string", "nullable": true, "example": "?page=2&limit=10" },
+          "prev": { "type": "string", "nullable": true, "example": null }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "example": "fail" },
+          "error": { "type": "string", "example": "ValidationError" },
+          "message": { "type": "string" },
+          "details": { "type": "array", "items": { "type": "object" } }
+        }
+      }
+    }
+  }
+}

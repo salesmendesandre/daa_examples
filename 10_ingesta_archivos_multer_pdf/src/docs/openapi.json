@@ -1,0 +1,74 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "DocuMind API - Ingesta de Archivos con Multer y PDF",
+    "version": "1.0.0",
+    "description": "Subida de un PDF (Multer) y extracción de su texto (pdf-parse). El cuerpo es multipart/form-data: Swagger UI muestra un botón para elegir el fichero."
+  },
+  "servers": [
+    { "url": "http://localhost:3010/api", "description": "Servidor de desarrollo local" }
+  ],
+  "tags": [
+    { "name": "Documents", "description": "Subida de un PDF y extracción de texto" }
+  ],
+  "paths": {
+    "/documents/upload": {
+      "post": {
+        "summary": "Subir un PDF (máx. 5 MB) y extraer su texto",
+        "tags": ["Documents"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["file"],
+                "properties": {
+                  "file": { "type": "string", "format": "binary", "description": "Documento PDF (application/pdf)" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "PDF procesado",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/DocumentUploadResponse" } } }
+          },
+          "400": { "description": "Sin archivo, tipo no PDF o límite de Multer superado (LIMIT_FILE_SIZE...)", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
+          "500": { "description": "El PDF no se pudo procesar", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "DocumentUploadResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "example": "success" },
+          "message": { "type": "string", "example": "PDF procesado con éxito" },
+          "fileInfo": {
+            "type": "object",
+            "properties": {
+              "originalName": { "type": "string", "example": "documento-prueba.pdf" },
+              "sizeBytes": { "type": "integer", "example": 1234 },
+              "numPages": { "type": "integer", "example": 1 },
+              "extractedLength": { "type": "integer", "example": 120 }
+            }
+          },
+          "preview": { "type": "string", "description": "Primeros 200 caracteres del texto extraído" }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "example": "fail" },
+          "error": { "type": "string", "example": "InvalidFileType" },
+          "message": { "type": "string" },
+          "details": { "type": "array", "items": { "type": "object" } }
+        }
+      }
+    }
+  }
+}
