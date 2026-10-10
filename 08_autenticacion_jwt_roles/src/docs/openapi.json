@@ -3,14 +3,16 @@
   "info": {
     "title": "DocuMind API - Autenticación JWT + RBAC",
     "version": "1.0.0",
-    "description": "Registro, login (bcrypt + JWT), perfil autenticado y un endpoint restringido por rol. Para probar las rutas protegidas: haz login, copia el 'token' de la respuesta y pégalo en el botón Authorize."
+    "description": "Registro, login (bcrypt + JWT), perfil autenticado y un endpoint restringido por rol. También incluye los EJERCICIOS ya resueltos del dominio Hospital (hospital-auth + clinical-records). Para probar las rutas protegidas: haz login, copia el 'token' de la respuesta y pégalo en el botón Authorize."
   },
   "servers": [
     { "url": "http://localhost:3008/api", "description": "Servidor de desarrollo local" }
   ],
   "tags": [
-    { "name": "Auth", "description": "Registro y login con bcrypt + JWT" },
-    { "name": "Users", "description": "Endpoints autenticados y restringidos por rol" }
+    { "name": "Auth", "description": "CONTENIDO: registro y login con bcrypt + JWT" },
+    { "name": "Users", "description": "CONTENIDO: endpoints autenticados y restringidos por rol" },
+    { "name": "Hospital Auth", "description": "EJERCICIO 3: registro con contraseña fuerte" },
+    { "name": "Clinical Records", "description": "EJERCICIOS 1 y 2: RBAC flexible y Ownership/BOLA" }
   ],
   "paths": {
     "/auth/register": {
@@ -104,6 +106,131 @@
           "403": { "description": "El rol del token no es admin", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
         }
       }
+    },
+    "/hospital-auth/register": {
+      "post": {
+        "summary": "Registrar personal o paciente del hospital (contraseña fuerte + bcrypt costo 12)",
+        "tags": ["Hospital Auth"],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/HospitalRegisterPayload" } } }
+        },
+        "responses": {
+          "201": {
+            "description": "Usuario del hospital registrado",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/HospitalAuthResponse" } } }
+          },
+          "400": { "description": "Payload no válido (Zod) o contraseña débil (WeakPassword)", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
+          "409": { "description": "El email ya está registrado", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    },
+    "/hospital-auth/login": {
+      "post": {
+        "summary": "Login del hospital (usa las credenciales de demo del README)",
+        "tags": ["Hospital Auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/LoginPayload" },
+              "example": { "email": "paciente1@hospital.test", "password": "Patient1!" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Credenciales correctas",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/HospitalAuthResponse" } } }
+          },
+          "401": { "description": "Credenciales inválidas", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    },
+    "/clinical-records": {
+      "post": {
+        "summary": "Crear historial clínico (solo doctor o hospital_admin)",
+        "tags": ["Clinical Records"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateClinicalRecordPayload" } } }
+        },
+        "responses": {
+          "201": {
+            "description": "Historial creado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "data": { "$ref": "#/components/schemas/ClinicalRecord" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Payload no válido (Zod)", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
+          "401": { "description": "Token ausente, inválido o caducado", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
+          "403": { "description": "Rol sin permiso (p. ej. patient)", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    },
+    "/clinical-records/admin/audit": {
+      "get": {
+        "summary": "Resumen de auditoría (EJERCICIO 1: solo hospital_admin)",
+        "tags": ["Clinical Records"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Resumen de historiales",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "data": { "$ref": "#/components/schemas/AuditReport" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "description": "Token ausente, inválido o caducado", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
+          "403": { "description": "Rol distinto de hospital_admin", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    },
+    "/clinical-records/{id}": {
+      "get": {
+        "summary": "Consultar un historial (EJERCICIO 2: Ownership/BOLA)",
+        "description": "El paciente solo ve SU historial y sin confidentialNotes; el doctor solo los que tiene asignados; hospital_admin ve todos.",
+        "tags": ["Clinical Records"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" }, "example": "rec1" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Historial (sin confidentialNotes si lo pide el propio paciente)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "data": { "$ref": "#/components/schemas/ClinicalRecord" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "description": "Token ausente, inválido o caducado", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
+          "403": { "description": "El historial no pertenece al usuario del token", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
+          "404": { "description": "Historial no encontrado", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
     }
   },
   "components": {
@@ -150,6 +277,67 @@
           "message": { "type": "string", "example": "Usuario registrado con éxito" },
           "token": { "type": "string", "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." },
           "user": { "$ref": "#/components/schemas/PublicUser" }
+        }
+      },
+      "HospitalRegisterPayload": {
+        "type": "object",
+        "required": ["email", "password", "fullName", "role"],
+        "properties": {
+          "email": { "type": "string", "format": "email", "example": "nuevo@hospital.test" },
+          "password": {
+            "type": "string",
+            "description": "Mínimo 8 caracteres, con mayúscula, minúscula, número y carácter especial (@$!%*?&)",
+            "example": "Fuerte123!"
+          },
+          "fullName": { "type": "string", "minLength": 2, "example": "Nuevo Doctor" },
+          "role": { "type": "string", "enum": ["patient", "nurse", "doctor", "hospital_admin"], "example": "doctor" }
+        }
+      },
+      "PublicHospitalUser": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "example": "p1" },
+          "email": { "type": "string", "example": "paciente1@hospital.test" },
+          "fullName": { "type": "string", "example": "Paciente Uno" },
+          "role": { "type": "string", "enum": ["patient", "nurse", "doctor", "hospital_admin"] }
+        }
+      },
+      "HospitalAuthResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "example": "success" },
+          "token": { "type": "string", "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." },
+          "user": { "$ref": "#/components/schemas/PublicHospitalUser" }
+        }
+      },
+      "ClinicalRecord": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "example": "rec1" },
+          "patientId": { "type": "string", "example": "p1" },
+          "doctorAssignedId": { "type": "string", "example": "d1" },
+          "diagnosis": { "type": "string", "example": "Gripe estacional" },
+          "prescriptions": { "type": "array", "items": { "type": "string" }, "example": ["Paracetamol 650mg cada 8h"] },
+          "confidentialNotes": { "type": "string", "description": "Nunca se devuelve al propio paciente" },
+          "createdAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "CreateClinicalRecordPayload": {
+        "type": "object",
+        "required": ["patientId", "doctorAssignedId", "diagnosis"],
+        "properties": {
+          "patientId": { "type": "string", "example": "p1" },
+          "doctorAssignedId": { "type": "string", "example": "d1" },
+          "diagnosis": { "type": "string", "minLength": 3, "example": "Migraña crónica" },
+          "prescriptions": { "type": "array", "items": { "type": "string" }, "default": [] },
+          "confidentialNotes": { "type": "string" }
+        }
+      },
+      "AuditReport": {
+        "type": "object",
+        "properties": {
+          "totalRecords": { "type": "integer", "example": 2 },
+          "totalPatients": { "type": "integer", "example": 2 }
         }
       },
       "ErrorResponse": {

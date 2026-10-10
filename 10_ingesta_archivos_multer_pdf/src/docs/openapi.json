@@ -3,13 +3,14 @@
   "info": {
     "title": "DocuMind API - Ingesta de Archivos con Multer y PDF",
     "version": "1.0.0",
-    "description": "Subida de un PDF (Multer) y extracción de su texto (pdf-parse). El cuerpo es multipart/form-data: Swagger UI muestra un botón para elegir el fichero."
+    "description": "Subida de un PDF (Multer) y extracción de su texto (pdf-parse). Documents es el contenido de la sesión; Resumes son los ejercicios ya resueltos (Magic Bytes, subida múltiple y extracción de skills). Los cuerpos son multipart/form-data: Swagger UI muestra un botón para elegir el fichero."
   },
   "servers": [
     { "url": "http://localhost:3010/api", "description": "Servidor de desarrollo local" }
   ],
   "tags": [
-    { "name": "Documents", "description": "Subida de un PDF y extracción de texto" }
+    { "name": "Documents", "description": "CONTENIDO: subida de un PDF y extracción de texto" },
+    { "name": "Resumes", "description": "EJERCICIOS 1, 2 y 3: CVs y adjuntos" }
   ],
   "paths": {
     "/documents/upload": {
@@ -39,6 +40,70 @@
           "500": { "description": "El PDF no se pudo procesar", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
         }
       }
+    },
+    "/resumes/upload-cv": {
+      "post": {
+        "summary": "Subir un CV en PDF y calcular la afinidad con las skills esperadas (EJERCICIOS 1 y 3)",
+        "tags": ["Resumes"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["cv"],
+                "properties": {
+                  "cv": { "type": "string", "format": "binary", "description": "CV en PDF (se comprueba la firma binaria %PDF-)" },
+                  "skills": {
+                    "type": "string",
+                    "description": "Skills esperadas separadas por comas. Si se omite: typescript, node, express, mongodb, docker, react",
+                    "example": "TypeScript,Node,Docker,Python,Java"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "CV procesado",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CvUploadResponse" } } }
+          },
+          "400": { "description": "Sin archivo, firma binaria falsa (CorruptedOrSpoofedFile) o límite de Multer superado", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
+          "500": { "description": "El PDF no se pudo procesar", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    },
+    "/resumes/upload-attachments": {
+      "post": {
+        "summary": "Subir hasta 3 adjuntos PDF de 3 MB cada uno (EJERCICIO 2)",
+        "tags": ["Resumes"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["attachments"],
+                "properties": {
+                  "attachments": {
+                    "type": "array",
+                    "maxItems": 3,
+                    "items": { "type": "string", "format": "binary" }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Adjuntos recibidos",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AttachmentsUploadResponse" } } }
+          },
+          "400": { "description": "Ningún adjunto, alguno no es PDF (InvalidFileType o, si miente en el mimetype, CorruptedOrSpoofedFile), más de 3 (LIMIT_FILE_COUNT) o más de 3 MB (LIMIT_FILE_SIZE)", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
     }
   },
   "components": {
@@ -58,6 +123,46 @@
             }
           },
           "preview": { "type": "string", "description": "Primeros 200 caracteres del texto extraído" }
+        }
+      },
+      "CvUploadResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "example": "success" },
+          "message": { "type": "string", "example": "CV procesado con éxito" },
+          "fileInfo": {
+            "type": "object",
+            "properties": {
+              "originalName": { "type": "string", "example": "cv-candidato.pdf" },
+              "sizeBytes": { "type": "integer", "example": 2345 },
+              "numPages": { "type": "integer", "example": 1 }
+            }
+          },
+          "skills": {
+            "type": "object",
+            "properties": {
+              "expected": { "type": "array", "items": { "type": "string" }, "example": ["TypeScript", "Node", "Docker", "Python", "Java"] },
+              "found": { "type": "array", "items": { "type": "string" }, "example": ["TypeScript", "Node", "Docker", "Python"] },
+              "matchScore": { "type": "number", "example": 80 }
+            }
+          }
+        }
+      },
+      "AttachmentsUploadResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "example": "success" },
+          "message": { "type": "string", "example": "2 documento(s) recibido(s) correctamente" },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "originalName": { "type": "string", "example": "cv-candidato.pdf" },
+                "sizeBytes": { "type": "integer", "example": 2345 }
+              }
+            }
+          }
         }
       },
       "ErrorResponse": {

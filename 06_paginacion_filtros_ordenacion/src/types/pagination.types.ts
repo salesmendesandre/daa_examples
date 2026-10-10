@@ -23,3 +23,19 @@ export interface PaginatedResult<T> {
   data: T[];
   meta: PaginationMeta;
 }
+
+// EJERCICIO 3 (punto 5): enlaces HATEOAS. En el catálogo sustituyen a los
+// "next"/"prev" relativos del contenido por URLs completas que conservan el
+// resto de filtros de la petición (?category=..., ?brand=...).
+export interface HateoasLinks {
+  first: string;
+  prev: string | null;
+  next: string | null;
+  last: string;
+}
+
+export interface PaginatedResultWithLinks<T> {
+  data: T[];
+  meta: Omit<PaginationMeta, "next" | "prev">;
+  links: HateoasLinks;
+}

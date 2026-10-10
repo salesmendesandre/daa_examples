@@ -44,3 +44,14 @@ export class EmailAlreadyRegisteredError extends AppError {
     this.name = "EmailAlreadyRegistered";
   }
 }
+
+// EJERCICIO 3: la contraseña no cumple la política de seguridad.
+export class WeakPasswordError extends AppError {
+  constructor() {
+    super(
+      "La contraseña debe contener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.",
+      400
+    );
+    this.name = "WeakPassword";
+  }
+}

@@ -5,32 +5,59 @@ al del resto de capítulos: `src/server.ts` como punto de entrada (`connectDB()`
 `app.listen`), `src/app.ts` con la configuración de Express. Puerto 3006. Conectado a MongoDB
 con Mongoose. Swagger UI en `http://localhost:3006/api/docs`.
 
+Este proyecto mezcla en el mismo `src/` dos cosas distintas:
+
+- **CONTENIDO** de la sesión (dominio `Documents`, `/api/documents`): paginación offset con
+  `Promise.all`, whitelist de ordenación y filtrado por tag/búsqueda.
+- **EJERCICIOS ya resueltos** (dominio `Catalog`, `/api/catalog`), catálogo e-commerce sobre el
+  mismo patrón arquitectónico que `Documents`:
+  - **Ejercicio 1** — `CatalogQuerySchema`: validación Zod del query string con
+    `z.coerce.number()` para `page`/`limit`/`minPrice`/`maxPrice`, whitelist de ordenación
+    (`CATALOG_SORT_FIELDS`) y un `.refine()` cruzado para que `minPrice <= maxPrice`.
+  - **Ejercicio 2** — `buildMongoCatalogFilter`: filtros dinámicos `$gte`/`$lte` (precio) y
+    `$in` (`category`/`brand` con varios valores separados por comas), con `brand` escapado
+    y comparado de forma exacta e insensible a mayúsculas.
+  - **Ejercicio 3** — `buildPaginationLinks`: enlaces HATEOAS (`first`/`prev`/`next`/`last`)
+    construidos con la API nativa `URL`, que conservan el resto de filtros de la petición
+    original (`category`, `brand`, etc.) en vez de perderlos.
+
 ## Estructura
 
 ```
 src/
-├── server.ts                          → arranque: connectDB() + seedData() + app.listen
-├── app.ts                             → montaje de rutas + Swagger + manejador de errores
-├── config/database.ts                 → conexión a MongoDB
-├── controllers/documents.controller.ts→ GET /api/documents
-├── data/seed.ts                       → 15 documentos de demo (idempotente)
-├── docs/openapi.json                  → contrato OpenAPI con los parámetros de query
-├── errors/app.error.ts                → heredado (AppError)
+├── server.ts                            → arranque: connectDB() + seedData() + app.listen
+├── app.ts                               → montaje de rutas (Documents + Catalog) + Swagger + manejador de errores
+├── config/database.ts                   → conexión a MongoDB
+├── controllers/
+│   ├── documents.controller.ts          → CONTENIDO (GET /api/documents)
+│   └── catalog.controller.ts            → EJERCICIOS (GET /api/catalog)
+├── data/seed.ts                         → 15 documentos + 24 productos de catálogo (idempotente)
+├── docs/openapi.json                    → contrato OpenAPI (Documents + Catalog)
+├── errors/app.error.ts                  → HEREDADO (AppError)
 ├── middlewares/
-│   ├── error.middleware.ts            → heredado (globalErrorHandler + 404)
-│   └── validate.middleware.ts         → heredado: validateQuery (arreglado para Express 5)
-├── models/document.model.ts           → esquema Mongoose de Documents
-├── routes/documents.routes.ts         → /api/documents
-├── schemas/document.schema.ts         → rechaza parámetros repetidos (?tag=a&tag=b)
-├── services/pagination.service.ts     → Promise.all datos+conteo, whitelist de ordenación
-├── types/pagination.types.ts          → PaginationOptions/Meta/Result
-└── utils/escapeRegex.ts               → función pura: escapa el texto del cliente antes de un $regex
+│   ├── error.middleware.ts              → HEREDADO (globalErrorHandler + 404)
+│   └── validate.middleware.ts           → HEREDADO: validateQuery (arreglado para Express 5)
+├── models/
+│   ├── document.model.ts                → CONTENIDO (esquema Mongoose de Documents)
+│   └── catalogProduct.model.ts          → EJERCICIOS (esquema Mongoose de CatalogProduct)
+├── routes/
+│   ├── documents.routes.ts              → CONTENIDO (/api/documents)
+│   └── catalog.routes.ts                → EJERCICIOS (/api/catalog)
+├── schemas/
+│   ├── document.schema.ts               → CONTENIDO (rechaza parámetros repetidos ?tag=a&tag=b)
+│   └── catalog.schema.ts                → EJERCICIOS (Ej.1: Zod + coerce + whitelist de ordenación)
+├── services/
+│   ├── pagination.service.ts            → CONTENIDO (Promise.all datos+conteo, whitelist de ordenación)
+│   ├── catalog.service.ts               → EJERCICIOS (orquesta Ej.1 validación + Ej.2 filtro + Ej.3 enlaces)
+│   ├── catalogFilter.service.ts         → EJERCICIOS (Ej.2: filtros dinámicos $gte/$lte/$in)
+│   └── hateoas.service.ts               → EJERCICIOS (Ej.3: enlaces HATEOAS first/prev/next/last)
+├── types/pagination.types.ts            → CONTENIDO (PaginationOptions/Meta/Result) + EJERCICIOS (Ej.3: HateoasLinks/PaginatedResultWithLinks)
+└── utils/escapeRegex.ts                 → HEREDADO: función pura, escapa el texto del cliente antes de un $regex
 ```
 
-> Este capítulo aún no incluye ejercicios resueltos en este repositorio — se añadirán más
-> adelante, una vez corregidos en clase.
-
 ## Problemas que resuelve este código
+
+**Documents (CONTENIDO):**
 
 1. **Parámetros repetidos** (`?tag=a&tag=b`, `?sort=a&sort=b`) llegan como array y el servicio
    reventaba con 500 (`toLowerCase is not a function`). Ahora `DocumentsQuerySchema` responde 400.
@@ -46,6 +73,19 @@ src/
 6. **`totalPages` = 0 sin resultados**: el enlace `last` apuntaría a la página 0. Se usa `|| 1`.
 7. **`app.listen` en Express 5** recibe el error si el puerto está ocupado (`EADDRINUSE`); antes
    se anunciaba "escuchando" aunque el servidor no arrancara.
+
+**Catalog (EJERCICIOS) — huecos encontrados y corregidos sobre la solución base del libro:**
+
+1. **Ordenación sin lista blanca**: el enunciado pide listas blancas (como `ALLOWED_SORT_FIELDS`
+   del punto 3), pero la solución inicial aceptaba cualquier `sort`: `?sort=-campoInventado` se
+   ejecutaba sin más y `?sort=` o `?sort=$where` hacían fallar MongoDB (500). Ahora
+   `CATALOG_SORT_FIELDS` limita los campos permitidos.
+2. **Faltaba `$in`**: el enunciado pide `$gte`, `$lte` **e `$in`**, pero la solución no lo usaba:
+   `?category=calzado,ropa` devolvía 0 productos. Ahora varios valores separados por comas se
+   traducen a `{ $in: [...] }` tanto en `category` como en `brand`.
+3. **`brand` sin escapar en un `$regex`**: `?brand=[` daba 500 y `?brand=.*` devolvía todas las
+   marcas. Ahora cada marca se escapa (`utils/escapeRegex.ts`) y se busca de forma exacta e
+   insensible a mayúsculas (`^nike$` con la opción `i`).
 
 ## Requisitos y ejecución
 
@@ -70,6 +110,8 @@ npm run build && npm start
 ```bash
 curl http://localhost:3006/health
 
+# --- Documents (CONTENIDO) ---
+
 # Página por defecto (page=1, limit=10, orden por createdAt desc)
 curl http://localhost:3006/api/documents
 
@@ -84,6 +126,30 @@ curl "http://localhost:3006/api/documents?tag=nodejs&tag=api"
 
 # Campo de ordenación no permitido -> se ignora (usa createdAt por defecto)
 curl "http://localhost:3006/api/documents?sort=passwordHash"
+
+# --- Catalog (EJERCICIOS) ---
+
+# Página por defecto (page=1, limit=12, orden por createdAt desc, solo productos en stock)
+curl "http://localhost:3006/api/catalog"
+
+# Ej.2 — Filtro de rango de precio ($gte/$lte)
+curl "http://localhost:3006/api/catalog?minPrice=20&maxPrice=80"
+
+# Ej.2 — Varias categorías/marcas separadas por comas ($in)
+curl "http://localhost:3006/api/catalog?category=calzado,ropa&brand=Nike,Adidas"
+
+# Ordenación por precio ascendente (whitelist: createdAt, price, rating, name)
+curl "http://localhost:3006/api/catalog?sort=price"
+
+# Ej.1 — minPrice > maxPrice -> 400 (Zod .refine())
+curl "http://localhost:3006/api/catalog?minPrice=100&maxPrice=10"
+
+# Ej.1 — Campo de ordenación no permitido -> 400 (a diferencia de Documents, aquí se rechaza)
+curl "http://localhost:3006/api/catalog?sort=-campoInventado"
+
+# Ej.3 — Enlaces HATEOAS: pide la página 2 con un filtro y observa "links.first/prev/next/last"
+# conservando "category" en cada URL generada
+curl "http://localhost:3006/api/catalog?category=calzado&page=2&limit=5"
 ```
 
 - **Swagger UI**: [http://localhost:3006/api/docs](http://localhost:3006/api/docs).

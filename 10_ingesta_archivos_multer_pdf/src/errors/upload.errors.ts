@@ -27,3 +27,14 @@ export class PdfProcessingError extends AppError {
     this.name = "PdfProcessingError";
   }
 }
+
+// EJERCICIO 1: segunda barrera, los bytes REALES del archivo (ver
+// middlewares/verifyPdfMagicBytes.ts). Con varios adjuntos (Ejercicio 2) se
+// indica cuál de ellos es el falso.
+export class CorruptedOrSpoofedFileError extends AppError {
+  constructor(fileName?: string) {
+    const which = fileName ? ` '${fileName}'` : "";
+    super(`El archivo adjunto${which} no es un documento PDF legítimo (la firma de cabecera binaria no coincide).`, 400);
+    this.name = "CorruptedOrSpoofedFile";
+  }
+}
