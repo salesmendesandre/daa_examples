@@ -21,7 +21,11 @@ El código está organizado de forma modular, con un proyecto independiente por 
 | [`03_validacion_zod_errores/`](./03_validacion_zod_errores/) | 3. Validación con Zod y Manejo de Errores | Zod schemas, Inferencia de tipos (`z.infer`), Middlewares de validación, `AppError`, Manejador global Express 5 |
 | [`04_documentacion_openapi_swagger/`](./04_documentacion_openapi_swagger/) | 4. Documentación con OpenAPI / Swagger | Swagger UI Express, OpenAPI 3.0 JSON specification, Documentación interactiva `/api/docs` |
 | [`05_persistencia_mongodb_mongoose/`](./05_persistencia_mongodb_mongoose/) | 5. Persistencia con MongoDB y Mongoose | MongoDB, Mongoose, Esquemas tipados, Conexión a base de datos, CRUD persistente |
-| [`07_seguridad_observabilidad/`](./07_seguridad_observabilidad/) | 6. Seguridad y Observabilidad | Helmet (cabeceras HTTP seguras), CORS, Rate Limiting (`express-rate-limit`), Logger estructurado (Pino) |
+| [`06_paginacion_filtros_ordenacion/`](./06_paginacion_filtros_ordenacion/) | 6. Paginación, Filtros y Ordenación | Paginación offset con `Promise.all`, Metadatos de paginación, Whitelist de ordenación, Filtrado por tag y búsqueda |
+| [`07_seguridad_observabilidad/`](./07_seguridad_observabilidad/) | 7. Seguridad y Observabilidad | Helmet (cabeceras HTTP seguras), CORS, Rate Limiting (`express-rate-limit`), Logger estructurado (Pino) |
+| [`08_autenticacion_jwt_roles/`](./08_autenticacion_jwt_roles/) | 8. Autenticación JWT y Roles (RBAC) | Hash de contraseñas (`bcrypt`), Firma y verificación de tokens JWT, Middleware de autenticación Bearer, Control de acceso por roles (`user` / `admin`) |
+| [`09_testing_vitest_supertest/`](./09_testing_vitest_supertest/) | 9. Testing de APIs con Vitest y Supertest | Vitest, Supertest, Tests unitarios y de integración HTTP, `app` exportada sin `.listen()`, Almacenamiento en memoria |
+| [`10_ingesta_archivos_multer_pdf/`](./10_ingesta_archivos_multer_pdf/) | 10. Ingesta de Archivos (Multer y PDF) | Peticiones `multipart/form-data`, Multer (`memoryStorage`), Validación de MIME type con `fileFilter`, Extracción de texto de PDFs (`pdf-parse`) |
 
 ---
 
