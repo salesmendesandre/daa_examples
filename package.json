@@ -9,14 +9,14 @@
     "00_fundamentos_javascript",
     "01_fundamentos_express_ts",
     "02_diseno_rest_arquitectura",
-    "03_validacion_zod_errores",
-    "04_documentacion_openapi_swagger",
-    "05_persistencia_mongodb_mongoose",
-    "06_paginacion_filtros_ordenacion",
-    "07_seguridad_observabilidad",
-    "08_autenticacion_jwt_roles",
-    "09_testing_vitest_supertest",
-    "10_ingesta_archivos_multer_pdf"
+    "03_persistencia_mongodb_mongoose",
+    "04_validacion_zod_errores",
+    "05_documentacion_openapi_swagger",
+    "06_seguridad_observabilidad",
+    "07_autenticacion_jwt_roles",
+    "08_ingesta_archivos_multer_pdf",
+    "09_paginacion_filtros_ordenacion",
+    "10_testing_vitest_supertest"
   ],
   "scripts": {
     "build": "npm run build --workspaces --if-present",

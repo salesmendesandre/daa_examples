@@ -1,0 +1,152 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "DocuMind API - Paginación, Filtrado y Ordenación",
+    "version": "1.0.0",
+    "description": "Capítulo 7. Paginación offset con Promise.all, whitelist de ordenación y filtrado dinámico de Documents (contenido); validación Zod del query string, filtros dinámicos $gte/$lte/$in y enlaces HATEOAS de Catalog (ejercicios resueltos)."
+  },
+  "servers": [
+    { "url": "http://localhost:3006/api", "description": "Servidor de desarrollo local" }
+  ],
+  "tags": [
+    { "name": "Documents", "description": "Paginación, filtro por tag/búsqueda y ordenación" },
+    { "name": "Catalog", "description": "Catálogo e-commerce con filtros dinámicos y enlaces HATEOAS (ejercicios 1, 2 y 3 resueltos)" }
+  ],
+  "paths": {
+    "/documents": {
+      "get": {
+        "summary": "Listar documentos paginados",
+        "tags": ["Documents"],
+        "parameters": [
+          { "name": "page", "in": "query", "schema": { "type": "integer", "minimum": 1, "default": 1 }, "description": "Si no es un número válido se usa 1" },
+          { "name": "limit", "in": "query", "schema": { "type": "integer", "minimum": 1, "maximum": 50, "default": 10 }, "description": "Se recorta al rango 1-50" },
+          { "name": "sort", "in": "query", "schema": { "type": "string", "example": "-createdAt" }, "description": "createdAt, title o author (con '-' delante = descendente). Cualquier otro campo se ignora (whitelist)" },
+          { "name": "tag", "in": "query", "schema": { "type": "string", "example": "nodejs" } },
+          { "name": "search", "in": "query", "schema": { "type": "string", "example": "técnico" }, "description": "Búsqueda en el título, sin distinguir mayúsculas" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Página de documentos con metadatos de navegación",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "data": { "type": "array", "items": { "$ref": "#/components/schemas/Document" } },
+                    "meta": { "$ref": "#/components/schemas/PaginationMeta" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Parámetro repetido (?tag=a&tag=b)", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    },
+    "/catalog": {
+      "get": {
+        "summary": "Catálogo paginado con filtros dinámicos y enlaces HATEOAS",
+        "tags": ["Catalog"],
+        "parameters": [
+          { "name": "page", "in": "query", "schema": { "type": "integer", "minimum": 1, "default": 1 } },
+          { "name": "limit", "in": "query", "schema": { "type": "integer", "minimum": 1, "maximum": 50, "default": 12 } },
+          { "name": "minPrice", "in": "query", "schema": { "type": "number", "minimum": 0, "example": 20 } },
+          { "name": "maxPrice", "in": "query", "schema": { "type": "number", "minimum": 0, "example": 80 } },
+          { "name": "category", "in": "query", "schema": { "type": "string", "example": "calzado,ropa" }, "description": "Una o varias separadas por comas ($in)" },
+          { "name": "brand", "in": "query", "schema": { "type": "string", "example": "Nike,Adidas" }, "description": "Una o varias separadas por comas ($in), sin distinguir mayúsculas" },
+          { "name": "sort", "in": "query", "schema": { "type": "string", "enum": ["createdAt", "-createdAt", "price", "-price", "rating", "-rating", "name", "-name"], "default": "-createdAt" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Página de productos en stock",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "data": { "type": "array", "items": { "$ref": "#/components/schemas/CatalogProduct" } },
+                    "meta": { "$ref": "#/components/schemas/CatalogMeta" },
+                    "links": { "$ref": "#/components/schemas/HateoasLinks" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Query string inválido (Zod): minPrice > maxPrice, limit fuera de 1-50, sort no permitido...", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Document": {
+        "type": "object",
+        "properties": {
+          "_id": { "type": "string", "example": "66d8e20f1a2b3c4d5e6f7a8b" },
+          "title": { "type": "string", "example": "Documento Técnico #1" },
+          "content": { "type": "string" },
+          "author": { "type": "string", "example": "André Mendes" },
+          "tags": { "type": "array", "items": { "type": "string" }, "example": ["nodejs", "api"] },
+          "createdAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "PaginationMeta": {
+        "type": "object",
+        "properties": {
+          "total": { "type": "integer", "example": 15 },
+          "page": { "type": "integer", "example": 1 },
+          "limit": { "type": "integer", "example": 10 },
+          "totalPages": { "type": "integer", "example": 2 },
+          "hasNextPage": { "type": "boolean", "example": true },
+          "hasPrevPage": { "type": "boolean", "example": false },
+          "next": { "type": "string", "nullable": true, "example": "?page=2&limit=10" },
+          "prev": { "type": "string", "nullable": true, "example": null }
+        }
+      },
+      "CatalogProduct": {
+        "type": "object",
+        "properties": {
+          "_id": { "type": "string" },
+          "name": { "type": "string", "example": "Producto de Moda #1" },
+          "brand": { "type": "string", "example": "Nike" },
+          "category": { "type": "string", "example": "calzado" },
+          "price": { "type": "number", "example": 22.5 },
+          "rating": { "type": "number", "example": 4 },
+          "inStock": { "type": "boolean", "example": true },
+          "createdAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "CatalogMeta": {
+        "type": "object",
+        "properties": {
+          "total": { "type": "integer", "example": 20 },
+          "page": { "type": "integer", "example": 2 },
+          "limit": { "type": "integer", "example": 5 },
+          "totalPages": { "type": "integer", "example": 4 },
+          "hasNextPage": { "type": "boolean", "example": true },
+          "hasPrevPage": { "type": "boolean", "example": true }
+        }
+      },
+      "HateoasLinks": {
+        "type": "object",
+        "properties": {
+          "first": { "type": "string", "example": "/api/catalog?category=calzado&page=1&limit=5" },
+          "prev": { "type": "string", "nullable": true, "example": "/api/catalog?category=calzado&page=1&limit=5" },
+          "next": { "type": "string", "nullable": true, "example": "/api/catalog?category=calzado&page=3&limit=5" },
+          "last": { "type": "string", "example": "/api/catalog?category=calzado&page=4&limit=5" }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "example": "fail" },
+          "error": { "type": "string", "example": "ValidationError" },
+          "message": { "type": "string" },
+          "details": { "type": "array", "items": { "type": "object" } }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,168 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "DocuMind API - Testing con Vitest y Supertest",
+    "version": "1.0.0",
+    "description": "Capítulo 8. Documents es la API sobre la que corre la suite de integración de tests/integration/documents.api.test.ts; Tasks es la API sobre la que corren los ejercicios resueltos de tests/exercises/. Para /tasks/admin/metrics: pide un token a /tasks/admin/token-demo y pégalo en Authorize."
+  },
+  "servers": [
+    { "url": "http://localhost:3009/api", "description": "Servidor de desarrollo local" }
+  ],
+  "tags": [
+    { "name": "Documents", "description": "API testeable" },
+    { "name": "Tasks", "description": "EJERCICIOS: API de Gestión de Tareas" }
+  ],
+  "paths": {
+    "/documents": {
+      "get": {
+        "summary": "Listar documentos",
+        "tags": ["Documents"],
+        "responses": { "200": { "description": "Listado", "content": { "application/json": { "schema": { "type": "object", "properties": { "status": { "type": "string", "example": "success" }, "count": { "type": "integer" }, "data": { "type": "array", "items": { "$ref": "#/components/schemas/Document" } } } } } } } }
+      },
+      "post": {
+        "summary": "Crear un documento",
+        "tags": ["Documents"],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateDocumentPayload" } } } },
+        "responses": {
+          "201": { "description": "Creado", "content": { "application/json": { "schema": { "type": "object", "properties": { "status": { "type": "string", "example": "success" }, "data": { "$ref": "#/components/schemas/Document" } } } } } },
+          "400": { "description": "Título de menos de 3 caracteres o sin autor (ValidationError)", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    },
+    "/documents/{id}": {
+      "get": {
+        "summary": "Obtener documento por ID",
+        "tags": ["Documents"],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" }, "example": 1 }],
+        "responses": {
+          "200": { "description": "Encontrado", "content": { "application/json": { "schema": { "type": "object", "properties": { "status": { "type": "string" }, "data": { "$ref": "#/components/schemas/Document" } } } } } },
+          "404": { "description": "No existe", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    },
+    "/tasks": {
+      "get": {
+        "summary": "Listar tareas",
+        "tags": ["Tasks"],
+        "responses": { "200": { "description": "Listado", "content": { "application/json": { "schema": { "type": "object", "properties": { "status": { "type": "string" }, "count": { "type": "integer" }, "data": { "type": "array", "items": { "$ref": "#/components/schemas/Task" } } } } } } } }
+      },
+      "post": {
+        "summary": "Crear tarea (EJERCICIO 1: 400 sin título o con prioridad no válida)",
+        "tags": ["Tasks"],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateTaskPayload" } } } },
+        "responses": {
+          "201": { "description": "Creada", "content": { "application/json": { "schema": { "type": "object", "properties": { "status": { "type": "string" }, "data": { "$ref": "#/components/schemas/Task" } } } } } },
+          "400": { "description": "Sin título, prioridad fuera de low/medium/high o fecha no válida", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    },
+    "/tasks/{id}": {
+      "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" }, "example": 1 }],
+      "get": {
+        "summary": "Consultar tarea (EJERCICIO 2)",
+        "tags": ["Tasks"],
+        "responses": {
+          "200": { "description": "Encontrada", "content": { "application/json": { "schema": { "type": "object", "properties": { "status": { "type": "string" }, "data": { "$ref": "#/components/schemas/Task" } } } } } },
+          "404": { "description": "No existe", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      },
+      "patch": {
+        "summary": "Modificar tarea (EJERCICIO 2)",
+        "tags": ["Tasks"],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateTaskPayload" } } } },
+        "responses": {
+          "200": { "description": "Modificada", "content": { "application/json": { "schema": { "type": "object", "properties": { "status": { "type": "string" }, "data": { "$ref": "#/components/schemas/Task" } } } } } },
+          "400": { "description": "Campo con valor no válido", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
+          "404": { "description": "No existe", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      },
+      "delete": {
+        "summary": "Borrar tarea (EJERCICIO 2)",
+        "tags": ["Tasks"],
+        "responses": {
+          "204": { "description": "Borrada (sin cuerpo)" },
+          "404": { "description": "No existe", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    },
+    "/tasks/admin/token-demo": {
+      "get": {
+        "summary": "Obtener un JWT de demo (solo para probar el EJERCICIO 3)",
+        "tags": ["Tasks"],
+        "responses": { "200": { "description": "Token firmado", "content": { "application/json": { "schema": { "type": "object", "properties": { "token": { "type": "string" } } } } } } }
+      }
+    },
+    "/tasks/admin/metrics": {
+      "get": {
+        "summary": "Métricas de tareas (EJERCICIO 3: protegido con JWT)",
+        "tags": ["Tasks"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Token válido", "content": { "application/json": { "schema": { "type": "object", "properties": { "status": { "type": "string" }, "data": { "type": "object", "properties": { "totalTasks": { "type": "integer" }, "completedTasks": { "type": "integer" } } } } } } } },
+          "401": { "description": "Sin cabecera Authorization (Unauthorized) o token manipulado (InvalidToken)", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": { "type": "http", "scheme": "bearer", "bearerFormat": "JWT", "description": "Pega SOLO el token de /tasks/admin/token-demo (Swagger añade 'Bearer ')." }
+    },
+    "schemas": {
+      "Document": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "title": { "type": "string", "example": "Arquitectura Hexagonal" },
+          "author": { "type": "string", "example": "Alistair Cockburn" }
+        }
+      },
+      "CreateDocumentPayload": {
+        "type": "object",
+        "required": ["title", "author"],
+        "properties": {
+          "title": { "type": "string", "minLength": 3, "example": "Patrones de Diseño en TypeScript" },
+          "author": { "type": "string", "example": "Gang of Four" }
+        }
+      },
+      "Task": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "title": { "type": "string", "example": "Configurar Vitest" },
+          "priority": { "type": "string", "enum": ["low", "medium", "high"] },
+          "completed": { "type": "boolean", "example": false },
+          "dueDate": { "type": "string", "example": "2026-11-01" }
+        }
+      },
+      "CreateTaskPayload": {
+        "type": "object",
+        "required": ["title"],
+        "properties": {
+          "title": { "type": "string", "example": "Configurar Vitest" },
+          "priority": { "type": "string", "enum": ["low", "medium", "high"], "default": "medium" },
+          "dueDate": { "type": "string", "example": "2026-11-01" }
+        }
+      },
+      "UpdateTaskPayload": {
+        "type": "object",
+        "description": "Todos opcionales. Campos no listados (p. ej. id) se ignoran.",
+        "properties": {
+          "title": { "type": "string" },
+          "priority": { "type": "string", "enum": ["low", "medium", "high"] },
+          "dueDate": { "type": "string" },
+          "completed": { "type": "boolean", "example": true }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "example": "fail" },
+          "error": { "type": "string", "example": "ValidationError" },
+          "message": { "type": "string" },
+          "details": { "type": "array", "items": { "type": "object" } }
+        }
+      }
+    }
+  }
+}
