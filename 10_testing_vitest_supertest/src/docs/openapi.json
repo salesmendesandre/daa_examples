@@ -3,7 +3,7 @@
   "info": {
     "title": "DocuMind API - Testing con Vitest y Supertest",
     "version": "1.0.0",
-    "description": "Capítulo 9. Documents es la API sobre la que corre la suite de integración de tests/integration/documents.api.test.ts; Tasks es la API sobre la que corren los ejercicios resueltos de tests/exercises/. Para /tasks/admin/metrics: pide un token a /tasks/admin/token-demo y pégalo en Authorize."
+    "description": "Capítulo 10. Documents es la API sobre la que corre la suite de integración de tests/integration/documents.api.test.ts; Tasks es la API sobre la que corren los ejercicios resueltos de tests/exercises/. Para /tasks/admin/metrics: pide un token a /tasks/admin/token-demo y pégalo en Authorize."
   },
   "servers": [
     { "url": "http://localhost:3009/api", "description": "Servidor de desarrollo local" }

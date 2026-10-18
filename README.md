@@ -23,9 +23,9 @@ El código está organizado de forma modular, con un proyecto independiente por 
 | [`05_documentacion_openapi_swagger/`](./05_documentacion_openapi_swagger/) | 5. Documentación con OpenAPI / Swagger | Swagger UI Express, OpenAPI 3.0 JSON specification, Documentación interactiva `/api/docs` |
 | [`06_seguridad_observabilidad/`](./06_seguridad_observabilidad/) | 6. Seguridad y Observabilidad | Helmet (cabeceras HTTP seguras), CORS, Rate Limiting (`express-rate-limit`), Logger estructurado (Pino) |
 | [`07_autenticacion_jwt_roles/`](./07_autenticacion_jwt_roles/) | 7. Autenticación JWT y Roles (RBAC) | Hash de contraseñas (`bcrypt`), Firma y verificación de tokens JWT, Middleware de autenticación Bearer, Control de acceso por roles (`user` / `admin`) |
-| [`08_ingesta_archivos_multer_pdf/`](./08_ingesta_archivos_multer_pdf/) | 7. Ingesta de Archivos (Multer y PDF) | Peticiones `multipart/form-data`, Multer (`memoryStorage`), Validación de MIME type con `fileFilter`, Extracción de texto de PDFs (`pdf-parse`) |
-| [`09_paginacion_filtros_ordenacion/`](./09_paginacion_filtros_ordenacion/) | 8. Paginación, Filtros y Ordenación | Paginación offset con `Promise.all`, Metadatos de paginación, Whitelist de ordenación, Filtrado por tag y búsqueda |
-| [`10_testing_vitest_supertest/`](./10_testing_vitest_supertest/) | 9. Testing de APIs con Vitest y Supertest | Vitest, Supertest, Tests unitarios y de integración HTTP, `app` exportada sin `.listen()`, Almacenamiento en memoria |
+| [`08_ingesta_archivos_multer_pdf/`](./08_ingesta_archivos_multer_pdf/) | 8. Ingesta de Archivos (Multer y PDF) | Peticiones `multipart/form-data`, Multer (`memoryStorage`), Validación de MIME type con `fileFilter`, Extracción de texto de PDFs (`pdf-parse`) |
+| [`09_paginacion_filtros_ordenacion/`](./09_paginacion_filtros_ordenacion/) | 9. Paginación, Filtros y Ordenación | Paginación offset con `Promise.all`, Metadatos de paginación, Whitelist de ordenación, Filtrado por tag y búsqueda |
+| [`10_testing_vitest_supertest/`](./10_testing_vitest_supertest/) | 10. Testing de APIs con Vitest y Supertest | Vitest, Supertest, Tests unitarios y de integración HTTP, `app` exportada sin `.listen()`, Almacenamiento en memoria |
 
 ---
 
