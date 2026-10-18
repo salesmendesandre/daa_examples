@@ -21,11 +21,11 @@ El código está organizado de forma modular, con un proyecto independiente por 
 | [`03_persistencia_mongodb_mongoose/`](./03_persistencia_mongodb_mongoose/) | 3. Persistencia con MongoDB y Mongoose | MongoDB, Mongoose, Esquemas tipados, Conexión a base de datos, CRUD persistente |
 | [`04_validacion_zod_errores/`](./04_validacion_zod_errores/) | 4. Validación con Zod y Manejo de Errores | Zod schemas, Inferencia de tipos (`z.infer`), Middlewares de validación, `AppError`, Manejador global Express 5 |
 | [`05_documentacion_openapi_swagger/`](./05_documentacion_openapi_swagger/) | 5. Documentación con OpenAPI / Swagger | Swagger UI Express, OpenAPI 3.0 JSON specification, Documentación interactiva `/api/docs` |
-| [`06_seguridad_observabilidad/`](./06_seguridad_observabilidad/) | 5. Seguridad y Observabilidad | Helmet (cabeceras HTTP seguras), CORS, Rate Limiting (`express-rate-limit`), Logger estructurado (Pino) |
-| [`07_autenticacion_jwt_roles/`](./07_autenticacion_jwt_roles/) | 6. Autenticación JWT y Roles (RBAC) | Hash de contraseñas (`bcrypt`), Firma y verificación de tokens JWT, Middleware de autenticación Bearer, Control de acceso por roles (`user` / `admin`) |
-| [`08_ingesta_archivos_multer_pdf/`](./08_ingesta_archivos_multer_pdf/) | 6. Ingesta de Archivos (Multer y PDF) | Peticiones `multipart/form-data`, Multer (`memoryStorage`), Validación de MIME type con `fileFilter`, Extracción de texto de PDFs (`pdf-parse`) |
-| [`09_paginacion_filtros_ordenacion/`](./09_paginacion_filtros_ordenacion/) | 7. Paginación, Filtros y Ordenación | Paginación offset con `Promise.all`, Metadatos de paginación, Whitelist de ordenación, Filtrado por tag y búsqueda |
-| [`10_testing_vitest_supertest/`](./10_testing_vitest_supertest/) | 8. Testing de APIs con Vitest y Supertest | Vitest, Supertest, Tests unitarios y de integración HTTP, `app` exportada sin `.listen()`, Almacenamiento en memoria |
+| [`06_seguridad_observabilidad/`](./06_seguridad_observabilidad/) | 6. Seguridad y Observabilidad | Helmet (cabeceras HTTP seguras), CORS, Rate Limiting (`express-rate-limit`), Logger estructurado (Pino) |
+| [`07_autenticacion_jwt_roles/`](./07_autenticacion_jwt_roles/) | 7. Autenticación JWT y Roles (RBAC) | Hash de contraseñas (`bcrypt`), Firma y verificación de tokens JWT, Middleware de autenticación Bearer, Control de acceso por roles (`user` / `admin`) |
+| [`08_ingesta_archivos_multer_pdf/`](./08_ingesta_archivos_multer_pdf/) | 7. Ingesta de Archivos (Multer y PDF) | Peticiones `multipart/form-data`, Multer (`memoryStorage`), Validación de MIME type con `fileFilter`, Extracción de texto de PDFs (`pdf-parse`) |
+| [`09_paginacion_filtros_ordenacion/`](./09_paginacion_filtros_ordenacion/) | 8. Paginación, Filtros y Ordenación | Paginación offset con `Promise.all`, Metadatos de paginación, Whitelist de ordenación, Filtrado por tag y búsqueda |
+| [`10_testing_vitest_supertest/`](./10_testing_vitest_supertest/) | 9. Testing de APIs con Vitest y Supertest | Vitest, Supertest, Tests unitarios y de integración HTTP, `app` exportada sin `.listen()`, Almacenamiento en memoria |
 
 ---
 

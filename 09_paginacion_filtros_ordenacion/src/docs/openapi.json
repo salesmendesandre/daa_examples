@@ -3,7 +3,7 @@
   "info": {
     "title": "DocuMind API - Paginación, Filtrado y Ordenación",
     "version": "1.0.0",
-    "description": "Capítulo 7. Paginación offset con Promise.all, whitelist de ordenación y filtrado dinámico de Documents (contenido); validación Zod del query string, filtros dinámicos $gte/$lte/$in y enlaces HATEOAS de Catalog (ejercicios resueltos)."
+    "description": "Capítulo 8. Paginación offset con Promise.all, whitelist de ordenación y filtrado dinámico de Documents (contenido); validación Zod del query string, filtros dinámicos $gte/$lte/$in y enlaces HATEOAS de Catalog (ejercicios resueltos)."
   },
   "servers": [
     { "url": "http://localhost:3006/api", "description": "Servidor de desarrollo local" }

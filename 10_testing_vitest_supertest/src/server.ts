@@ -6,6 +6,6 @@ app.listen(PORT, (error?: Error) => {
   // Express 5 llama a este callback TAMBIÉN si el arranque falla (p. ej.
   // EADDRINUSE: otro servidor ya usa el puerto) -> no anunciar un falso "escuchando".
   if (error) throw error;
-  console.log(`[Capítulo 8] Servidor Express 5 escuchando en http://localhost:${PORT}`);
-  console.log(`[Capítulo 8] Swagger UI disponible en http://localhost:${PORT}/api/docs`);
+  console.log(`[Capítulo 9] Servidor Express 5 escuchando en http://localhost:${PORT}`);
+  console.log(`[Capítulo 9] Swagger UI disponible en http://localhost:${PORT}/api/docs`);
 });
