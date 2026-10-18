@@ -26,6 +26,9 @@ El código está organizado de forma modular, con un proyecto independiente por 
 | [`08_ingesta_archivos_multer_pdf/`](./08_ingesta_archivos_multer_pdf/) | 8. Ingesta de Archivos (Multer y PDF) | Peticiones `multipart/form-data`, Multer (`memoryStorage`), Validación de MIME type con `fileFilter`, Extracción de texto de PDFs (`pdf-parse`) |
 | [`09_paginacion_filtros_ordenacion/`](./09_paginacion_filtros_ordenacion/) | 9. Paginación, Filtros y Ordenación | Paginación offset con `Promise.all`, Metadatos de paginación, Whitelist de ordenación, Filtrado por tag y búsqueda |
 | [`10_testing_vitest_supertest/`](./10_testing_vitest_supertest/) | 10. Testing de APIs con Vitest y Supertest | Vitest, Supertest, Tests unitarios y de integración HTTP, `app` exportada sin `.listen()`, Almacenamiento en memoria |
+| [`11_busqueda_tradicional_semantica/`](./11_busqueda_tradicional_semantica/) | 11. Búsqueda Tradicional vs. Semántica | Búsqueda léxica (índices `$text` en MongoDB), Concepto de Embeddings vectoriales, Similitud Coseno, Búsqueda semántica aproximada |
+| [`12_rag_conceptual_puente_frontend/`](./12_rag_conceptual_puente_frontend/) | 12. Arquitectura RAG y Puente Frontend | Pipeline de RAG (Retrieval-Augmented Generation), Ensamblado de prompts con contexto inyectado, Tipos TypeScript compartidos, Cliente HTTP `authenticatedFetch` para Vue 3 |
+| [`13_ejercicio_final_documind/`](./13_ejercicio_final_documind/) | **Proyecto Final Integrador (DocuMind)** | Se publicará más adelante (ver capítulo 12, sección 6) |
 
 ---
 

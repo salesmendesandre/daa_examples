@@ -1,0 +1,22 @@
+{
+  "name": "11_busqueda_tradicional_semantica",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Búsqueda tradicional vs. Búsqueda semántica con Embeddings y Similitud Coseno",
+  "scripts": {
+    "dev": "tsx watch src/app.ts",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "start": "node dist/app.js"
+  },
+  "dependencies": {
+    "express": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.9.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}

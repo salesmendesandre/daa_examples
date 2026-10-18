@@ -16,7 +16,9 @@
     "07_autenticacion_jwt_roles",
     "08_ingesta_archivos_multer_pdf",
     "09_paginacion_filtros_ordenacion",
-    "10_testing_vitest_supertest"
+    "10_testing_vitest_supertest",
+    "11_busqueda_tradicional_semantica",
+    "12_rag_conceptual_puente_frontend"
   ],
   "scripts": {
     "build": "npm run build --workspaces --if-present",
