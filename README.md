@@ -28,6 +28,9 @@ El código está organizado de forma modular, con un proyecto independiente por 
 | [`10_testing_vitest_supertest/`](./10_testing_vitest_supertest/) | 10. Testing de APIs con Vitest y Supertest | Vitest, Supertest, Tests unitarios y de integración HTTP, `app` exportada sin `.listen()`, Almacenamiento en memoria |
 | [`11_busqueda_tradicional_semantica/`](./11_busqueda_tradicional_semantica/) | 11. Búsqueda Tradicional vs. Semántica | Búsqueda léxica (índices `$text` en MongoDB), Concepto de Embeddings vectoriales, Similitud Coseno, Búsqueda semántica aproximada |
 | [`12_rag_conceptual_puente_frontend/`](./12_rag_conceptual_puente_frontend/) | 12. Arquitectura RAG y Puente Frontend | Pipeline de RAG (Retrieval-Augmented Generation), Ensamblado de prompts con contexto inyectado, Tipos TypeScript compartidos, Cliente HTTP `authenticatedFetch` para Vue 3 |
+| [`13_introduccion_vue/`](./13_introduccion_vue/) | 13. Introducción a Vue.js | Vite, Single File Components, `<script setup>`, primer componente |
+| [`14_configuracion_componentes/`](./14_configuracion_componentes/) | 14. Configuración y Componentes | Registro de componentes, props, eventos, `v-model` y `defineModel`, herencia de atributos |
+| [`15_plantillas_directivas/`](./15_plantillas_directivas/) | 15. Plantillas y Directivas | Interpolación, `v-if`/`v-for`, eventos, slots |
 | [`backend_documind/`](./backend_documind/) | **Proyecto Final Integrador (DocuMind)** | Se publicará más adelante (ver capítulo 12, sección 6) |
 
 ---
@@ -35,7 +38,7 @@ El código está organizado de forma modular, con un proyecto independiente por 
 ## 🚀 Requisitos Previos e Instalación
 
 ### Requisitos
-- **Node.js**: Versión 20.x LTS o superior (recomendado 22.x o 24.x).
+- **Node.js**: Versión 20.19 o superior (recomendado 22.12+ o 24.x; Vite 8, usado en el bloque de Vue, lo exige).
 - **npm**: Versión 10.x o superior.
 
 ### Instalación de dependencias
@@ -54,6 +57,18 @@ cd 01_fundamentos_express_ts
 npm install
 npm run dev
 ```
+
+### Ejemplos de Vue (carpetas `13` en adelante)
+
+Los capítulos del bloque II son proyectos Vite independientes: **no forman parte de los workspaces de npm**, así que el `npm install` de la raíz no los instala. Los capítulos `14` y `15` contienen además un proyecto por subcarpeta. Entra en el que quieras probar:
+
+```bash
+cd 14_configuracion_componentes/02_props
+npm install
+npm run dev
+```
+
+Vite abrirá el ejemplo en `http://localhost:5173`. Cada carpeta incluye su propio `README.md` con lo que conviene repasar.
 
 ---
 

@@ -1,0 +1,15 @@
+# Emisión de eventos personalizados
+
+Caso práctico del capítulo “Configuración y Componentes” del libro [Desarrollo de Aplicaciones Avanzadas](https://salesmendesandre.github.io/daa/vue/c14_configuracion_componentes.html). Aprenderás a emitir datos desde un componente hijo hacia su padre.
+
+## Qué verás aquí
+- Declaración de eventos con `defineEmits`.
+- Actualización del estado del padre a partir del payload emitido (`increment`).
+
+## Ponlo en marcha
+```bash
+npm install
+npm run dev
+```
+
+Interactúa con `ContadorBoton` y revisa cómo el valor acumulado se refleja en el componente padre. Prueba a enviar un objeto con más información (usuario, fecha) para replicar los ejercicios del capítulo.
