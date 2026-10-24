@@ -1,0 +1,386 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "DocuMind Master API",
+    "version": "1.0.0",
+    "description": "API REST de producción para gestión, ingesta de PDFs, búsqueda semántica y RAG de documentos técnicos. Eventos en tiempo real con Socket.IO en el mismo puerto (no descritos por OpenAPI; ver README)."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3013",
+      "description": "Servidor local"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Comprobar estado del servicio",
+        "responses": {
+          "200": {
+            "description": "Servidor en línea"
+          }
+        }
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "summary": "Registrar un nuevo usuario",
+        "responses": {
+          "201": {
+            "description": "Usuario registrado"
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "summary": "Iniciar sesión y obtener token JWT",
+        "responses": {
+          "200": {
+            "description": "Login exitoso"
+          }
+        }
+      }
+    },
+    "/api/documents": {
+      "get": {
+        "summary": "Listar documentos paginados y filtrados",
+        "responses": {
+          "200": {
+            "description": "Lista de documentos"
+          }
+        }
+      },
+      "post": {
+        "summary": "Crear un documento (Requiere autenticación)",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Documento creado"
+          }
+        }
+      }
+    },
+    "/api/rag/query": {
+      "post": {
+        "summary": "Realizar consulta RAG sobre la base de conocimiento",
+        "responses": {
+          "200": {
+            "description": "Contexto recuperado y respuesta generada"
+          }
+        },
+        "tags": [
+          "RAG"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "question"
+                ],
+                "properties": {
+                  "question": {
+                    "type": "string",
+                    "minLength": 3
+                  },
+                  "topK": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 10,
+                    "default": 3
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/documents/{id}": {
+      "get": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Obtener un documento por id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ObjectId del documento (24 caracteres hexadecimales)",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Documento encontrado"
+          },
+          "400": {
+            "description": "Identificador no válido"
+          },
+          "404": {
+            "description": "Documento no encontrado"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Actualizar parcialmente un documento (autor o admin)",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ObjectId del documento (24 caracteres hexadecimales)",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "minProperties": 1,
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 150
+                  },
+                  "content": {
+                    "type": "string",
+                    "minLength": 10
+                  },
+                  "tags": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "draft",
+                      "published",
+                      "archived"
+                    ]
+                  }
+                }
+              },
+              "example": {
+                "title": "Introducción a Express 5 (revisado)",
+                "status": "published"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Documento actualizado"
+          },
+          "400": {
+            "description": "Identificador o datos no válidos"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "403": {
+            "description": "No eres el autor ni administrador"
+          },
+          "404": {
+            "description": "Documento no encontrado"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Eliminar un documento (autor o admin)",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ObjectId del documento (24 caracteres hexadecimales)",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Documento eliminado"
+          },
+          "400": {
+            "description": "Identificador no válido"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "403": {
+            "description": "No eres el autor ni administrador"
+          },
+          "404": {
+            "description": "Documento no encontrado"
+          }
+        }
+      }
+    },
+    "/api/documents/upload-pdf": {
+      "post": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Subir un PDF o fichero de texto y crear un documento a partir de su contenido",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "file"
+                ],
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "PDF o text/* (máximo 10 MB)"
+                  },
+                  "title": {
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 150,
+                    "description": "Opcional; por defecto, el nombre del fichero"
+                  },
+                  "tags": {
+                    "type": "string",
+                    "description": "Array JSON de cadenas, p. ej. [\"vue\",\"pdf\"]"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Documento creado (incluye numPages; null para texto plano)"
+          },
+          "400": {
+            "description": "Fichero ausente, PDF dañado o sin texto, tags o título no válidos"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "413": {
+            "description": "El fichero supera los 10 MB"
+          },
+          "415": {
+            "description": "Tipo de fichero no admitido (solo PDF o texto)"
+          }
+        }
+      }
+    },
+    "/api/rag/stream": {
+      "post": {
+        "tags": [
+          "RAG"
+        ],
+        "summary": "Consulta RAG con la respuesta en streaming (Server-Sent Events sobre POST)",
+        "description": "La respuesta usa el formato text/event-stream. Eventos, en este orden: `sources` → `{ context: [{ documentId, title, snippet, similarity }] }`; `token` → `{ text }` (uno por fragmento); `done` → `{ answer, simulated: true }`. Si falla a mitad se envía `error` → `{ error }`. La generación es simulada (src/services/rag.service.ts, función generateAnswerStream). Retardo entre tokens configurable con RAG_STREAM_DELAY_MS (40 ms por defecto). Si el cliente cierra la conexión, la generación se detiene.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "question"
+                ],
+                "properties": {
+                  "question": {
+                    "type": "string",
+                    "minLength": 3
+                  },
+                  "topK": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 10,
+                    "default": 3
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Flujo de eventos SSE",
+            "content": {
+              "text/event-stream": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "event: sources\ndata: {\"context\":[]}\n\nevent: token\ndata: {\"text\":\"Según \"}\n\nevent: done\ndata: {\"answer\":\"Según …\",\"simulated\":true}\n\n"
+              }
+            }
+          },
+          "400": {
+            "description": "Pregunta no válida (respuesta JSON, antes de empezar el stream)"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          }
+        }
+      }
+    }
+  }
+}
