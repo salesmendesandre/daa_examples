@@ -1,0 +1,5 @@
+[
+  { "id": 1, "titulo": "Frontend de DocuMind con Vue 3", "completada": false },
+  { "id": 2, "titulo": "API REST de DocuMind con Express", "completada": true },
+  { "id": 3, "titulo": "Despliegue con Docker Compose", "completada": false }
+]

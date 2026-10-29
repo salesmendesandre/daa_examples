@@ -31,6 +31,10 @@ El código está organizado de forma modular, con un proyecto independiente por 
 | [`13_introduccion_vue/`](./13_introduccion_vue/) | 13. Introducción a Vue.js | Vite, Single File Components, `<script setup>`, primer componente |
 | [`14_configuracion_componentes/`](./14_configuracion_componentes/) | 14. Configuración y Componentes | Registro de componentes, props, eventos, `v-model` y `defineModel`, herencia de atributos |
 | [`15_plantillas_directivas/`](./15_plantillas_directivas/) | 15. Plantillas y Directivas | Interpolación, `v-if`/`v-for`, eventos, slots |
+| [`16_options_composition_api/`](./16_options_composition_api/) | 16. Options API vs Composition API | Comparativa de estilos, `ref`/`reactive`, `setup` |
+| [`17_ciclo_vida_reactividad/`](./17_ciclo_vida_reactividad/) | 17. Ciclo de Vida y Reactividad | Hooks de ciclo de vida, `computed`, `watch`, listas filtradas |
+| [`18_formularios_eventos/`](./18_formularios_eventos/) | 18. Formularios y Eventos | `v-model` en formularios, validación básica, eventos |
+| [`19_composables/`](./19_composables/) | 19. Composables | Composables propios (`useContador`, `useLocalStorage`, `useFetch` con cancelación), `toValue`, `onWatcherCleanup`, VueUse |
 | [`backend_documind/`](./backend_documind/) | **Proyecto Final Integrador (DocuMind)** | Se publicará más adelante (ver capítulo 12, sección 6) |
 
 ---
@@ -60,7 +64,7 @@ npm run dev
 
 ### Ejemplos de Vue (carpetas `13` en adelante)
 
-Los capítulos del bloque II son proyectos Vite independientes: **no forman parte de los workspaces de npm**, así que el `npm install` de la raíz no los instala. Los capítulos `14` y `15` contienen además un proyecto por subcarpeta. Entra en el que quieras probar:
+Los capítulos del bloque II son proyectos Vite independientes: **no forman parte de los workspaces de npm**, así que el `npm install` de la raíz no los instala. Los capítulos `14`, `15`, `17` y `18` contienen además un proyecto por subcarpeta. Entra en el que quieras probar:
 
 ```bash
 cd 14_configuracion_componentes/02_props

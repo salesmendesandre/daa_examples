@@ -1,0 +1,6 @@
+[
+  { "id": 1, "titulo": "Repasar los hooks del ciclo de vida", "completada": true },
+  { "id": 2, "titulo": "Extraer la lógica del contador a un composable", "completada": true },
+  { "id": 3, "titulo": "Persistir las notas en localStorage", "completada": false },
+  { "id": 4, "titulo": "Cargar datos con useFetch", "completada": false }
+]
