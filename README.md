@@ -35,7 +35,7 @@ El código está organizado de forma modular, con un proyecto independiente por 
 | [`17_ciclo_vida_reactividad/`](./17_ciclo_vida_reactividad/) | 17. Ciclo de Vida y Reactividad | Hooks de ciclo de vida, `computed`, `watch`, listas filtradas |
 | [`18_formularios_eventos/`](./18_formularios_eventos/) | 18. Formularios y Eventos | `v-model` en formularios, validación básica, eventos |
 | [`19_composables/`](./19_composables/) | 19. Composables | Composables propios (`useContador`, `useLocalStorage`, `useFetch` con cancelación), `toValue`, `onWatcherCleanup`, VueUse |
-| [`backend_documind/`](./backend_documind/) | **Proyecto Final Integrador (DocuMind)** | Se publicará más adelante (ver capítulo 12, sección 6) |
+| [`backend_documind/`](./backend_documind/) | **Proyecto Final Integrador (DocuMind)** | API REST completa del curso y backend del bloque de Vue: Auth JWT + Roles, MongoDB/Mongoose, subida de PDFs, búsqueda léxica y semántica, RAG con *streaming*, Socket.IO, Zod, OpenAPI/Swagger, Pino y tests con Vitest. Su [`README`](./backend_documind/README.md) explica cómo arrancarlo |
 
 ---
 
