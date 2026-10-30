@@ -1,19 +1,30 @@
 <template>
   <section>
-    <p>Usuario: {{ usuario.nombre }} ({{ usuario.rol }})</p>
-    <button @click="promocionar">Promocionar</button>
+    <p>Clics: {{ clicks }}</p>
+    <button @click="sumarClic">Sumar clic</button>
+
+    <p>{{ usuario.nombre }} tiene {{ usuario.edad }} años</p>
+    <button @click="cumplirAnios">Cumplir años</button>
   </section>
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 
+// ref: un valor simple; en el script se usa .value
+const clicks = ref(0)
+
+const sumarClic = () => {
+  clicks.value++
+}
+
+// reactive: un objeto; sus propiedades se usan directamente
 const usuario = reactive({
   nombre: 'Lucía',
-  rol: 'editora'
+  edad: 20
 })
 
-const promocionar = () => {
-  usuario.rol = usuario.rol === 'editora' ? 'admin' : 'editora'
+const cumplirAnios = () => {
+  usuario.edad++
 }
 </script>

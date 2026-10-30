@@ -1,19 +1,19 @@
 <template>
   <section>
     <label>
-      Valor:
-      <input type="number" v-model.number="valor" />
+      Número:
+      <input type="number" v-model.number="numero" />
     </label>
-    <p>Valor actual: {{ valor }}</p>
+    <p>Número actual: {{ numero }}</p>
   </section>
 </template>
 
 <script setup>
 import { ref, watch } from 'vue'
 
-const valor = ref(0)
+const numero = ref(0)
 
-watch(valor, (nuevo, anterior) => {
-  console.log(`El valor cambió de ${anterior} a ${nuevo}`)
+watch(numero, (nuevo, anterior) => {
+  console.log(`El número cambió de ${anterior} a ${nuevo}`)
 })
 </script>
