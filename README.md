@@ -35,7 +35,7 @@ El código está organizado de forma modular, con un proyecto independiente por 
 | [`17_ciclo_vida_reactividad/`](./17_ciclo_vida_reactividad/) | 17. Ciclo de Vida y Reactividad | Hooks de ciclo de vida, `computed`, `watch`, listas filtradas |
 | [`18_formularios_eventos/`](./18_formularios_eventos/) | 18. Formularios y Eventos | `v-model` en formularios, validación básica, eventos |
 | [`19_composables/`](./19_composables/) | 19. Composables | Composables propios (`useContador` y `useRaton` con limpieza en `onUnmounted`) |
-| [`20_router_estado_global/`](./20_router_estado_global/) | 20. Vue Router y Pinia | `01`–`03`: rutas, parámetros y rutas anidadas; `04`–`05`: *stores* de Pinia (carrito); `06`: estado guardado en `localStorage` |
+| [`20_router_estado_global/`](./20_router_estado_global/) | 20. Vue Router y Pinia | `01`–`03`: rutas, parámetros y rutas anidadas; `04`: *store* de Pinia (carrito); `05`: el carrito guardado en `localStorage` |
 | [`21_primevue/`](./21_primevue/) | 21. PrimeVue | PrimeVue 4 con el tema Aura, Tailwind CSS, PrimeIcons, importación automática de componentes y `ToastService` |
 | [`backend_documind/`](./backend_documind/) | **Proyecto Final Integrador (DocuMind)** | API REST completa del curso y backend del bloque de Vue: Auth JWT + Roles, MongoDB/Mongoose, subida de PDFs, búsqueda léxica y semántica, RAG con *streaming*, Socket.IO, Zod, OpenAPI/Swagger, Pino y tests con Vitest. Su [`README`](./backend_documind/README.md) explica cómo arrancarlo |
 

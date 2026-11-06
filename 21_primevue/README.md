@@ -1,22 +1,15 @@
 # PrimeVue: instalación y configuración (Vue 3 + Vite)
 
-Ejemplo del capítulo 21, **"Instalación y Configuración de PrimeVue"**, del libro [Desarrollo de Aplicaciones Avanzadas](https://salesmendesandre.github.io/daa/main/vue/c21_primevue.html). Muestra cómo integrar PrimeVue con tema Aura, Tailwind CSS, PrimeIcons y auto-import de componentes en un proyecto Vite.
+Ejemplo del capítulo [«Instalación y Configuración de PrimeVue»](https://salesmendesandre.github.io/daa/main/vue/c21_primevue.html) del libro [Desarrollo de Aplicaciones Avanzadas](https://salesmendesandre.github.io/daa/main/). Un botón de PrimeVue que muestra una notificación con `Toast`.
 
-## Qué repasar antes
-- Haber creado un proyecto base con Vite + Vue 3.
-- Conocer los pasos de instalación de dependencias (`primevue`, `@primeuix/themes`, `primeicons`, `tailwindcss` y `@tailwindcss/vite` y, como dependencias de desarrollo, `@primevue/auto-import-resolver` y `unplugin-vue-components`).
-- Vue Router y Pinia (capítulo 20), que el ejemplo integra con PrimeVue.
-- Node.js 18+ y un gestor de paquetes (`npm`, `pnpm`, `yarn`).
+## Qué contiene
+- `src/main.js`: registra PrimeVue con el tema Aura, los iconos de PrimeIcons y `ToastService`.
+- `src/style.css`: carga Tailwind CSS con `@import "tailwindcss"`.
+- `vite.config.js`: plugins de Tailwind CSS y de importación automática de componentes (`unplugin-vue-components` con `PrimeVueResolver`).
+- `src/App.vue`: usa `<Button>` y `<Toast>` sin importarlos; al pulsar el botón aparece la notificación.
 
-## Qué incluye el ejemplo
-- Configuración del tema Aura y uso de Tailwind CSS para maquetar.
-- Auto-import de componentes para evitar registros manuales.
-- Vistas `Home` y `About` con Vue Router, un store de Pinia y notificaciones con `ToastService`.
-
-## Cómo ejecutar
+## Cómo ejecutarlo
 ```bash
 npm install
 npm run dev
 ```
-
-Abre `http://localhost:5173` y revisa `src/main.js` y `vite.config.js` para ver la configuración mínima de PrimeVue.
