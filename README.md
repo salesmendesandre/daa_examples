@@ -37,7 +37,7 @@ El código está organizado de forma modular, con un proyecto independiente por 
 | [`19_composables/`](./19_composables/) | 19. Composables | Composables propios (`useContador` y `useRaton` con limpieza en `onUnmounted`) |
 | [`20_vue_router/`](./20_vue_router/) | 20. Vue Router | `01`: rutas y `<router-view>`; `02`: rutas con parámetros; `03`: rutas anidadas |
 | [`21_pinia/`](./21_pinia/) | 21. Pinia | `01`: *store* de un carrito compartido por dos componentes; `02`: el carrito guardado en `localStorage` |
-| [`22_primevue/`](./22_primevue/) | 22. PrimeVue | PrimeVue 4 con el tema Aura, Tailwind CSS, PrimeIcons, importación automática de componentes y `ToastService` |
+| [`22_vuetify/`](./22_vuetify/) | 22. Vuetify | Vuetify 4 con `createVuetify`, iconos de Material Design Icons, importación automática con `vite-plugin-vuetify` y `v-snackbar` |
 | [`backend_documind/`](./backend_documind/) | **Proyecto Final Integrador (DocuMind)** | API REST completa del curso y backend del bloque de Vue: Auth JWT + Roles, MongoDB/Mongoose, subida de PDFs, búsqueda léxica y semántica, RAG con *streaming*, Socket.IO, Zod, OpenAPI/Swagger, Pino y tests con Vitest. Su [`README`](./backend_documind/README.md) explica cómo arrancarlo |
 
 ---
