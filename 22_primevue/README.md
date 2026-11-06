@@ -1,6 +1,6 @@
 # PrimeVue: instalación y configuración (Vue 3 + Vite)
 
-Ejemplo del capítulo [«Instalación y Configuración de PrimeVue»](https://salesmendesandre.github.io/daa/main/vue/c21_primevue.html) del libro [Desarrollo de Aplicaciones Avanzadas](https://salesmendesandre.github.io/daa/main/). Un botón de PrimeVue que muestra una notificación con `Toast`.
+Ejemplo del capítulo [«Instalación y Configuración de PrimeVue»](https://salesmendesandre.github.io/daa/main/vue/c22_primevue.html) del libro [Desarrollo de Aplicaciones Avanzadas](https://salesmendesandre.github.io/daa/main/). Un botón de PrimeVue que muestra una notificación con `Toast`.
 
 ## Qué contiene
 - `src/main.js`: registra PrimeVue con el tema Aura, los iconos de PrimeIcons y `ToastService`.

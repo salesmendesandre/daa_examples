@@ -1,6 +1,6 @@
 # Estado global con Pinia
 
-Ejemplo asociado al capítulo [«Pinia: estado global»](https://salesmendesandre.github.io/daa/main/vue/c20_pinia.html) del libro [Desarrollo de Aplicaciones Avanzadas](https://salesmendesandre.github.io/daa/main/). Un carrito de la compra muestra cómo dos componentes independientes comparten el mismo estado.
+Ejemplo asociado al capítulo [«Pinia: estado global»](https://salesmendesandre.github.io/daa/main/vue/c21_pinia.html) del libro [Desarrollo de Aplicaciones Avanzadas](https://salesmendesandre.github.io/daa/main/). Un carrito de la compra muestra cómo dos componentes independientes comparten el mismo estado.
 
 ## Qué contiene
 - `src/stores/carrito.js`: el *store* `useCarritoStore`, con el estado (`productos`), dos getters (`cantidad` y `total`) y dos acciones (`anadir` y `vaciar`).

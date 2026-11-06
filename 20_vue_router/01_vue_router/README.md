@@ -1,6 +1,6 @@
 # Router básico: Home y About
 
-Ejemplo que acompaña al capítulo 20, **"Ruteo y Estado Global"**, del libro [Desarrollo de Aplicaciones Avanzadas](https://salesmendesandre.github.io/daa/main/vue/c20_vue_router.html). Muestra la configuración mínima de Vue Router y el uso de `<RouterLink>` / `<RouterView>`.
+Ejemplo que acompaña al capítulo 20, **"Vue Router: navegación entre vistas"**, del libro [Desarrollo de Aplicaciones Avanzadas](https://salesmendesandre.github.io/daa/main/vue/c20_vue_router.html). Muestra la configuración mínima de Vue Router y el uso de `<RouterLink>` / `<RouterView>`.
 
 ## Qué encontrarás
 - `src/router/index.js` con `createRouter` y `createWebHistory`, más dos rutas (`/` y `/about`) con nombres declarados.

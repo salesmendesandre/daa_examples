@@ -181,7 +181,7 @@ router.post("/upload-pdf", authenticate, receiveFile, async (req: Request, res: 
     embedding
   });
 
-  // Aviso en tiempo real (capítulo 26): solo después de que la operación haya tenido éxito
+  // Aviso en tiempo real (capítulo 27): solo después de que la operación haya tenido éxito
   emitDocumentEvent("created", newDoc, req.user!);
 
   res.status(201).json({

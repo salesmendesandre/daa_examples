@@ -1,6 +1,6 @@
 # Rutas dinámicas con parámetros
 
-Proyecto alineado al capítulo 20, **"Ruteo y Estado Global"**, del libro [Desarrollo de Aplicaciones Avanzadas](https://salesmendesandre.github.io/daa/main/vue/c20_vue_router.html). Su objetivo es ilustrar cómo declarar rutas con segmentos variables y leerlos desde los componentes.
+Proyecto alineado al capítulo 20, **"Vue Router: navegación entre vistas"**, del libro [Desarrollo de Aplicaciones Avanzadas](https://salesmendesandre.github.io/daa/main/vue/c20_vue_router.html). Su objetivo es ilustrar cómo declarar rutas con segmentos variables y leerlos desde los componentes.
 
 ## Qué encontrarás
 - `src/router/index.js` con la ruta `/usuarios/:id`, activando `props: true` para inyectar el parámetro como prop.

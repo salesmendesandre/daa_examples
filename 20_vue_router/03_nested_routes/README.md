@@ -1,6 +1,6 @@
 # Rutas anidadas para un CRUD
 
-Ejemplo vinculado al capítulo 20, **"Ruteo y Estado Global"**, del libro [Desarrollo de Aplicaciones Avanzadas](https://salesmendesandre.github.io/daa/main/vue/c20_vue_router.html). Muestra cómo estructurar un flujo CRUD dentro de un layout padre que mantiene navegación y acciones comunes.
+Ejemplo vinculado al capítulo 20, **"Vue Router: navegación entre vistas"**, del libro [Desarrollo de Aplicaciones Avanzadas](https://salesmendesandre.github.io/daa/main/vue/c20_vue_router.html). Muestra cómo estructurar un flujo CRUD dentro de un layout padre que mantiene navegación y acciones comunes.
 
 ## Qué encontrarás
 - `ProductosLayout.vue` funcionando como contenedor con un `<RouterView>` secundario y enlaces hacia cada operación.

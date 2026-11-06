@@ -29,7 +29,7 @@ function sendEvent(res: Response, event: string, data: unknown) {
 }
 
 /**
- * Respuesta en streaming (capítulo 27). Es un POST (la pregunta va en el cuerpo y el token en
+ * Respuesta en streaming (capítulo 28). Es un POST (la pregunta va en el cuerpo y el token en
  * la cabecera Authorization) cuya respuesta usa el formato text/event-stream:
  *   event: sources → { context }          (primero, en cuanto termina la recuperación)
  *   event: token   → { text }             (uno por fragmento de la respuesta)
