@@ -55,7 +55,7 @@ El servidor arrancará en `http://localhost:3013`:
 
 ### 3. Datos de demostración
 
-La primera vez que arranca con la base de datos vacía, el servidor carga **3 usuarios y 14 documentos** de ejemplo (`src/data/seed.ts`), suficientes para probar la paginación, los filtros y los permisos. Para desactivarlo, pon `SEED_DEMO_DATA=false` en `.env`. Para volver al estado inicial en cualquier momento:
+La primera vez que arranca con la base de datos vacía, el servidor carga **3 usuarios, 14 documentos y 5 notas** de ejemplo (`src/data/seed.ts`), suficientes para probar el CRUD de notas, la paginación, los filtros y los permisos. Las notas se cargan aparte si su colección está vacía, aunque la base de datos ya tenga usuarios y documentos. Para desactivarlo, pon `SEED_DEMO_DATA=false` en `.env`. Para volver al estado inicial en cualquier momento:
 
 ```bash
 npm run seed
@@ -89,6 +89,11 @@ npm test
 | `POST` | `/api/auth/register` | — | Registro (devuelve token) |
 | `POST` | `/api/auth/login` | — | Inicio de sesión (devuelve token) |
 | `GET` | `/api/auth/me` | Bearer | Perfil del usuario autenticado |
+| `GET` | `/api/notes` | — | Todas las notas (las fijadas, primero) |
+| `GET` | `/api/notes/:id` | — | Detalle de una nota |
+| `POST` | `/api/notes` | — | Crear nota (`title`, `content`, `pinned`) |
+| `PATCH` | `/api/notes/:id` | — | Actualizar parcialmente una nota |
+| `DELETE` | `/api/notes/:id` | — | Eliminar nota |
 | `GET` | `/api/documents?page=&limit=&sort=&tag=&status=` | — | Listado paginado con filtros y metadatos (`meta`) |
 | `GET` | `/api/documents/:id` | — | Detalle de un documento |
 | `POST` | `/api/documents` | Bearer | Crear documento |

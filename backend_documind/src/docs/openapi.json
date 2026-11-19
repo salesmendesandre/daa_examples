@@ -381,6 +381,184 @@
           }
         }
       }
+    },
+    "/api/notes": {
+      "get": {
+        "tags": [
+          "Notes"
+        ],
+        "summary": "Listar todas las notas (fijadas primero)",
+        "responses": {
+          "200": {
+            "description": "Array de notas"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Notes"
+        ],
+        "summary": "Crear una nota",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "title"
+                ],
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 80
+                  },
+                  "content": {
+                    "type": "string",
+                    "maxLength": 1000
+                  },
+                  "pinned": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "example": {
+                "title": "Repasar Vue Router",
+                "content": "Rutas con parámetros y props: true",
+                "pinned": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Nota creada"
+          },
+          "400": {
+            "description": "Datos no válidos"
+          }
+        }
+      }
+    },
+    "/api/notes/{id}": {
+      "get": {
+        "tags": [
+          "Notes"
+        ],
+        "summary": "Obtener una nota por id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ObjectId de la nota (24 caracteres hexadecimales)",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Nota encontrada"
+          },
+          "400": {
+            "description": "Identificador no válido"
+          },
+          "404": {
+            "description": "Nota no encontrada"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Notes"
+        ],
+        "summary": "Actualizar parcialmente una nota",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ObjectId de la nota (24 caracteres hexadecimales)",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "minProperties": 1,
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 80
+                  },
+                  "content": {
+                    "type": "string",
+                    "maxLength": 1000
+                  },
+                  "pinned": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "example": {
+                "pinned": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Nota actualizada"
+          },
+          "400": {
+            "description": "Identificador o datos no válidos"
+          },
+          "404": {
+            "description": "Nota no encontrada"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Notes"
+        ],
+        "summary": "Eliminar una nota",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ObjectId de la nota (24 caracteres hexadecimales)",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Nota eliminada"
+          },
+          "400": {
+            "description": "Identificador no válido"
+          },
+          "404": {
+            "description": "Nota no encontrada"
+          }
+        }
+      }
     }
   }
 }

@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import { UserModel } from "../models/user.model.js";
 import { DocumentModel } from "../models/document.model.js";
+import { NoteModel } from "../models/note.model.js";
 import { computeEmbedding } from "../services/embedding.util.js";
 import { logger } from "../config/logger.js";
 
@@ -45,11 +46,32 @@ const DEMO_DOCUMENTS: DemoDocument[] = [
   { title: "Notas antiguas de Firebase", content: "El curso anterior usaba Firebase como backend; este año el frontend consume la API propia construida en el bloque de APIs.", tags: ["firebase"], status: "archived", author: "admin@documind.test" }
 ];
 
-/** Inserta usuarios y documentos de demostración. Con `reset` borra antes los existentes. */
+const DEMO_NOTES = [
+  { title: "Arrancar DocuMind antes que Vue", content: "Primero MongoDB, después npm run dev en backend_documind y, por último, el frontend.", pinned: true },
+  { title: "Entrega de la práctica", content: "Revisar el enunciado y la fecha de entrega en Studium.", pinned: true },
+  { title: "Repasar axios", content: "baseURL, timeout y qué contiene error.response cuando la API responde con un 4xx.", pinned: false },
+  { title: "Probar los errores", content: "Apagar la API, pedir un id que no existe y enviar un formulario vacío.", pinned: false },
+  { title: "Ideas para el proyecto", content: "", pinned: false }
+];
+
+/** Inserta las notas de demostración si la colección está vacía. */
+const seedDemoNotes = async (): Promise<void> => {
+  if ((await NoteModel.estimatedDocumentCount()) > 0) return;
+  await NoteModel.insertMany(DEMO_NOTES);
+  logger.info(`[Seed] Cargadas ${DEMO_NOTES.length} notas de demostración`);
+};
+
+/** Inserta usuarios, documentos y notas de demostración. Con `reset` borra antes los existentes. */
 export const seedDemoData = async ({ reset = false } = {}): Promise<boolean> => {
   if (reset) {
-    await Promise.all([DocumentModel.deleteMany({}), UserModel.deleteMany({})]);
-  } else if ((await UserModel.estimatedDocumentCount()) > 0 || (await DocumentModel.estimatedDocumentCount()) > 0) {
+    await Promise.all([DocumentModel.deleteMany({}), UserModel.deleteMany({}), NoteModel.deleteMany({})]);
+  }
+
+  // Las notas se comprueban por separado: así también se cargan en una base de datos
+  // que ya tenía usuarios y documentos de antes de que existieran las notas.
+  await seedDemoNotes();
+
+  if (!reset && ((await UserModel.estimatedDocumentCount()) > 0 || (await DocumentModel.estimatedDocumentCount()) > 0)) {
     return false; // La base de datos ya tiene datos: no se toca.
   }
 

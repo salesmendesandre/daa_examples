@@ -1,3 +1,70 @@
+/* Estilos mínimos: el capítulo trata de la API, no del aspecto */
 body {
+  font-family: system-ui, sans-serif;
   margin: 0;
+  background: #f6f7f9;
+}
+main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 16px;
+}
+form,
+.notas li,
+.mensaje {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+input,
+textarea,
+button {
+  font: inherit;
+  padding: 6px 10px;
+}
+.notas {
+  list-style: none;
+  padding: 0;
+}
+.notas li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.notas li div {
+  flex: 1;
+}
+.notas li p {
+  margin: 4px 0 0;
+  color: #555;
+}
+.mensaje.aviso {
+  border-color: #d97706;
+  background: #fffbeb;
+}
+.mensaje.error {
+  border-color: #dc2626;
+  background: #fef2f2;
+}
+nav {
+  display: flex;
+  gap: 16px;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 16px 16px 0;
+}
+nav a {
+  color: #555;
+  text-decoration: none;
+}
+nav a.router-link-exact-active {
+  color: #15803d;
+  font-weight: 600;
 }

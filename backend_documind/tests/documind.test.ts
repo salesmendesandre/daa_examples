@@ -142,4 +142,34 @@ describe("DocuMind API Suite", () => {
       expect(res.body.error).toMatch(/PDF/);
     });
   });
+
+  describe("Notas: validación sin base de datos", () => {
+    it("POST /api/notes sin título devuelve 400 con el detalle del campo", async () => {
+      const res = await request(app).post("/api/notes").send({ content: "Sin título" });
+      expect(res.status).toBe(400);
+      expect(res.body.details[0].field).toBe("title");
+      expect(res.body.details[0].message).toBe("El título es obligatorio");
+    });
+
+    it("POST /api/notes rechaza campos desconocidos", async () => {
+      const res = await request(app).post("/api/notes").send({ title: "Nota", color: "rojo" });
+      expect(res.status).toBe(400);
+    });
+
+    it("PATCH /api/notes/:id con un id mal formado devuelve 400", async () => {
+      const res = await request(app).patch("/api/notes/no-es-un-id").send({ pinned: true });
+      expect(res.status).toBe(400);
+      expect(res.body.error).toBe("Identificador de nota no válido");
+    });
+
+    it("PATCH /api/notes/:id con el cuerpo vacío devuelve 400", async () => {
+      const res = await request(app).patch("/api/notes/0123456789abcdef01234567").send({});
+      expect(res.status).toBe(400);
+    });
+
+    it("DELETE /api/notes/:id con un id mal formado devuelve 400", async () => {
+      const res = await request(app).delete("/api/notes/123");
+      expect(res.status).toBe(400);
+    });
+  });
 });

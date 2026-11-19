@@ -46,7 +46,7 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
 import { listarDocumentos } from '../api/documents'
-import { useApi } from '../composables/useApi'
+import { normalizarError } from '../api/errores'
 import { useAvisos } from '../composables/useAvisos'
 import { formatearFecha } from '../utils/formato'
 import EstadoDocumento from '../components/EstadoDocumento.vue'
@@ -77,10 +77,26 @@ const parametros = computed(() => {
   }
 })
 
-// Cada vez que cambian los parámetros se repite la petición
-const { data, error, cargando } = useApi(() => listarDocumentos(parametros.value), {
-  observar: parametros
-})
+// Los tres estados de la petición
+const data = ref(null)
+const error = ref(null)
+const cargando = ref(false)
+
+// GET /documents con los parámetros de la tabla
+async function cargar() {
+  cargando.value = true
+  error.value = null
+  try {
+    data.value = await listarDocumentos(parametros.value)
+  } catch (err) {
+    error.value = normalizarError(err)
+  } finally {
+    cargando.value = false
+  }
+}
+
+// Cada vez que cambian los parámetros (página, tamaño u orden) se repite la petición
+watch(parametros, cargar, { immediate: true })
 
 // Si falla una carga cuando ya hay datos en pantalla, no los borramos: lo avisamos
 const avisos = useAvisos()

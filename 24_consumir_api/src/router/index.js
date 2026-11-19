@@ -1,28 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import NotasView from '../views/NotasView.vue'
+import NotaNuevaView from '../views/NotaNuevaView.vue'
 
-// Las vistas se cargan bajo demanda (import dinámico): Vite genera un fichero por vista
+// Una vista por pantalla: el listado y el alta
 const routes = [
-  { path: '/', redirect: { name: 'documentos' } },
-  {
-    path: '/documentos',
-    name: 'documentos',
-    component: () => import('../views/DocumentosView.vue')
-  },
-  {
-    path: '/documentos/:id',
-    name: 'documento-detalle',
-    component: () => import('../views/DocumentoDetalleView.vue'),
-    props: true
-  },
-  {
-    path: '/:pathMatch(.*)*',
-    name: 'no-encontrada',
-    component: () => import('../views/NoEncontradaView.vue')
-  }
+  { path: '/', name: 'notas', component: NotasView },
+  { path: '/nueva', name: 'nota-nueva', component: NotaNuevaView }
 ]
 
 export const router = createRouter({
   history: createWebHistory(),
-  routes,
-  scrollBehavior: () => ({ top: 0 })
+  routes
 })

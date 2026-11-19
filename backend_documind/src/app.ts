@@ -8,6 +8,7 @@ import { logger } from "./config/logger.js";
 import { allowedOrigins } from "./config/cors.js";
 import authRoutes from "./routes/auth.routes.js";
 import documentsRoutes from "./routes/documents.routes.js";
+import notesRoutes from "./routes/notes.routes.js";
 import ragRoutes from "./routes/rag.routes.js";
 import { notFound, errorHandler } from "./middlewares/error.middleware.js";
 import openApiSpec from "./docs/openapi.json" with { type: "json" };
@@ -47,6 +48,7 @@ app.get("/health", (req, res) => {
 // 7. Rutas de la API
 app.use("/api/auth", authRoutes);
 app.use("/api/documents", documentsRoutes);
+app.use("/api/notes", notesRoutes);
 app.use("/api/rag", ragRoutes);
 
 // 8. Manejo de 404 y Errores Globales

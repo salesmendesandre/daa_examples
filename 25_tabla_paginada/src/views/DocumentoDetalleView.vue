@@ -31,8 +31,9 @@
 </template>
 
 <script setup>
+import { ref, watch } from 'vue'
 import { obtenerDocumento } from '../api/documents'
-import { useApi } from '../composables/useApi'
+import { normalizarError } from '../api/errores'
 import { formatearFecha } from '../utils/formato'
 import EstadoDocumento from '../components/EstadoDocumento.vue'
 import MensajeError from '../components/MensajeError.vue'
@@ -40,10 +41,26 @@ import MensajeError from '../components/MensajeError.vue'
 // props: true en la ruta → el parámetro :id llega como prop
 const props = defineProps({ id: { type: String, required: true } })
 
-// Si cambia el id sin desmontar la vista (p. ej. un enlace a otro documento), se recarga
-const { data: documento, error, cargando } = useApi(() => obtenerDocumento(props.id), {
-  observar: () => props.id
-})
+// Los tres estados de la petición
+const documento = ref(null)
+const error = ref(null)
+const cargando = ref(false)
+
+// GET /documents/:id
+async function cargar() {
+  cargando.value = true
+  error.value = null
+  try {
+    documento.value = await obtenerDocumento(props.id)
+  } catch (err) {
+    error.value = normalizarError(err)
+  } finally {
+    cargando.value = false
+  }
+}
+
+// Si cambia el id sin desmontar la vista (p. ej. un enlace a otro documento), se vuelve a pedir
+watch(() => props.id, cargar, { immediate: true })
 </script>
 
 <style scoped>

@@ -1,16 +1,19 @@
 # Listados paginados
 
-Ejemplo del capítulo 25, **"Listados paginados"**, del libro [Desarrollo de Aplicaciones Avanzadas](https://salesmendesandre.github.io/daa/main/vue/c25_tabla_paginada.html). Parte de `24_consumir_api` y sustituye la lista por una tabla de Vuetify paginada y ordenada en el servidor.
+Ejemplo del capítulo 25, **"Listados paginados"**, del libro [Desarrollo de Aplicaciones Avanzadas](https://salesmendesandre.github.io/daa/main/vue/c25_tabla_paginada.html). Reutiliza la base de `24_consumir_api` (cliente axios y `normalizarError`) y pasa de las notas a los **documentos** de DocuMind: una tabla de Vuetify paginada y ordenada en el servidor y la vista de detalle.
 
 ## Qué repasar antes
-- El ejemplo `24_consumir_api`: cliente axios, servicios, `normalizarError` y `useApi`.
+- El ejemplo `24_consumir_api`: cliente axios, servicios y `normalizarError`.
 - Del bloque de APIs: CORS (capítulo 6) y paginación con metadatos (capítulo 9).
 - Node.js 20+ y Docker (para MongoDB).
 
 ## Qué incluye el ejemplo
-- `DocumentosView.vue`: `v-data-table-server` con `v-model:page`, `v-model:items-per-page` y `v-model:sort-by`; un `computed` traduce esos valores a los parámetros `page`, `limit` y `sort` de DocuMind y `useApi` repite la petición cuando cambian.
+- `DocumentosView.vue`: `v-data-table-server` con `v-model:page`, `v-model:items-per-page` y `v-model:sort-by`; un `computed` traduce esos valores a los parámetros `page`, `limit` y `sort` de DocuMind y un `watch` repite la petición cuando cambian.
 - `src/composables/useAvisos.js`: cola de avisos de toda la aplicación, que `App.vue` muestra con `v-snackbar-queue`. El listado la usa si falla la carga de otra página.
-- El resto (cliente axios, servicios, errores, `useApi`, detalle) es igual que en `24_consumir_api`.
+- `src/api/documents.js`: servicio de documentos (`GET /documents` con parámetros y `GET /documents/:id`).
+- `DocumentoDetalleView.vue`: detalle por parámetro de ruta, con mensajes para 400/404 y errores de red.
+- `EstadoDocumento.vue` y `src/utils/formato.js`: etiqueta de color para el estado y formato de fechas.
+- El cliente axios y `errores.js` son los de `24_consumir_api`.
 
 ## Cómo ejecutar
 
