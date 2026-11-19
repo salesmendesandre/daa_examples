@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-import { useAvisos } from '@/composables/useAvisos'
+import { useAvisos } from './composables/useAvisos'
 
 const { cola } = useAvisos()
 </script>

@@ -1,8 +1,8 @@
 <script setup>
 import { watch } from 'vue'
-import ResumenCarrito from '@/components/ResumenCarrito.vue'
-import Catalogo from '@/components/Catalogo.vue'
-import { useCarritoStore } from '@/stores/carrito'
+import ResumenCarrito from './components/ResumenCarrito.vue'
+import Catalogo from './components/Catalogo.vue'
+import { useCarritoStore } from './stores/carrito'
 
 const carrito = useCarritoStore()
 

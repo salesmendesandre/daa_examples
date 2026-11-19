@@ -11,7 +11,7 @@ Ejemplo del capítulo 24, **"Consumir la API REST desde Vue"**, del libro [Desar
 - `.env.example` con `VITE_API_URL` y su lectura con `import.meta.env` en `src/api/client.js` (instancia de axios con `baseURL` y `timeout`).
 - `src/api/documents.js`: servicio con las llamadas a la API; `src/api/errores.js`: normalización de errores (red, timeout, 4xx, 5xx) leyendo el cuerpo `{ error, details }` de DocuMind.
 - `src/composables/useApi.js`: evolución de `useFetch` para axios con `cargando`, `error` y `recargar`.
-- `DocumentosView.vue`: lista (`v-list`) con la primera página de documentos, esqueleto de carga y mensaje de error con «Reintentar».
+- `DocumentosView.vue`: lista (`v-list`) con la primera página de documentos, esqueleto de carga y mensaje de error.
 - `DocumentoDetalleView.vue`: detalle por parámetro de ruta, con mensajes para 400/404 y errores de red.
 
 ## Cómo ejecutar
@@ -37,4 +37,4 @@ Ejemplo del capítulo 24, **"Consumir la API REST desde Vue"**, del libro [Desar
    npm run dev
    ```
 
-Abre `http://localhost:5173`. Pulsa un documento para ver su detalle. Para ver el manejo de errores, detén el backend y pulsa «Reintentar», o abre `http://localhost:5173/documentos/no-es-un-id`.
+Abre `http://localhost:5173`. Pulsa un documento para ver su detalle. Para ver el manejo de errores, detén el backend y recarga la página, o abre `http://localhost:5173/documentos/no-es-un-id`.

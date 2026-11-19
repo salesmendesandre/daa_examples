@@ -1,5 +1,5 @@
-import { ref, shallowRef, watch } from 'vue'
-import { normalizarError } from '@/api/errores'
+import { ref, watch } from 'vue'
+import { normalizarError } from '../api/errores'
 
 /**
  * Versión para axios del useFetch del capítulo 19.
@@ -8,7 +8,7 @@ import { normalizarError } from '@/api/errores'
  * @param opciones.observar  getter o ref: cuando cambia, se repite la petición
  */
 export function useApi(peticion, { observar = null } = {}) {
-  const data = shallowRef(null)
+  const data = ref(null)
   const error = ref(null)
   const cargando = ref(false)
 

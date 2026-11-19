@@ -2,8 +2,8 @@
   <section class="d-flex flex-column ga-3">
     <h1 class="text-headline-large font-weight-bold">Documentos</h1>
 
-    <!-- Error: mensaje con la opción de reintentar -->
-    <MensajeError v-if="error" :error="error" con-reintento @reintentar="recargar" />
+    <!-- Error: mensaje con el problema -->
+    <MensajeError v-if="error" :error="error" />
 
     <!-- Mientras llega la respuesta: esqueleto con la forma de la lista -->
     <v-skeleton-loader v-else-if="cargando" type="list-item-two-line@5" aria-busy="true" />
@@ -31,12 +31,12 @@
 </template>
 
 <script setup>
-import { listarDocumentos } from '@/api/documents'
-import { useApi } from '@/composables/useApi'
-import { formatearFecha } from '@/utils/formato'
-import EstadoDocumento from '@/components/EstadoDocumento.vue'
-import MensajeError from '@/components/MensajeError.vue'
+import { listarDocumentos } from '../api/documents'
+import { useApi } from '../composables/useApi'
+import { formatearFecha } from '../utils/formato'
+import EstadoDocumento from '../components/EstadoDocumento.vue'
+import MensajeError from '../components/MensajeError.vue'
 
 // Sin parámetros, DocuMind devuelve la primera página: los 10 documentos más recientes
-const { data, error, cargando, recargar } = useApi(() => listarDocumentos())
+const { data, error, cargando } = useApi(() => listarDocumentos())
 </script>

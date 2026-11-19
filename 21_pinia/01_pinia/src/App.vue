@@ -1,6 +1,6 @@
 <script setup>
-import ResumenCarrito from '@/components/ResumenCarrito.vue'
-import Catalogo from '@/components/Catalogo.vue'
+import ResumenCarrito from './components/ResumenCarrito.vue'
+import Catalogo from './components/Catalogo.vue'
 </script>
 
 <template>

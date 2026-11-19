@@ -4,7 +4,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import { infoEstado } from '@/utils/formato'
+import { infoEstado } from '../utils/formato'
 
 const props = defineProps({ estado: { type: String, required: true } })
 const info = computed(() => infoEstado(props.estado))

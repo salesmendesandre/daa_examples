@@ -4,7 +4,7 @@
       <v-btn prepend-icon="mdi-arrow-left" variant="text" :to="{ name: 'documentos' }">Volver al listado</v-btn>
     </div>
 
-    <MensajeError v-if="error" :error="error" con-reintento @reintentar="recargar" />
+    <MensajeError v-if="error" :error="error" />
 
     <!-- Esqueleto mientras llega el documento -->
     <v-card v-else-if="cargando || !documento" aria-busy="true">
@@ -31,17 +31,17 @@
 </template>
 
 <script setup>
-import { obtenerDocumento } from '@/api/documents'
-import { useApi } from '@/composables/useApi'
-import { formatearFecha } from '@/utils/formato'
-import EstadoDocumento from '@/components/EstadoDocumento.vue'
-import MensajeError from '@/components/MensajeError.vue'
+import { obtenerDocumento } from '../api/documents'
+import { useApi } from '../composables/useApi'
+import { formatearFecha } from '../utils/formato'
+import EstadoDocumento from '../components/EstadoDocumento.vue'
+import MensajeError from '../components/MensajeError.vue'
 
 // props: true en la ruta → el parámetro :id llega como prop
 const props = defineProps({ id: { type: String, required: true } })
 
 // Si cambia el id sin desmontar la vista (p. ej. un enlace a otro documento), se recarga
-const { data: documento, error, cargando, recargar } = useApi(() => obtenerDocumento(props.id), {
+const { data: documento, error, cargando } = useApi(() => obtenerDocumento(props.id), {
   observar: () => props.id
 })
 </script>

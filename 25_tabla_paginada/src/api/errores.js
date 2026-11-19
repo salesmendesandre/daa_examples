@@ -27,15 +27,22 @@ export function normalizarError(error) {
     }
   }
 
+  // Hay respuesta: la API ha contestado con un código de error (4xx o 5xx).
   // DocuMind responde { error, details? } (validación) o { error } (resto de errores)
   const { status, data } = error.response
+
+  // details solo llega en los errores de validación (400). Se convierte en una lista de
+  // { campo, mensaje }; el nombre del campo viene en field (cuerpo) o en param (query string).
+  // ?. evita un fallo si la respuesta no trae cuerpo y ?? se queda con el primer valor que exista
   const detalles = Array.isArray(data?.details)
     ? data.details.map((d) => ({ campo: d.field ?? d.param ?? '', mensaje: d.message }))
     : []
 
   return {
+    // 500 o más: ha fallado el servidor; de 400 a 499: la petición no era válida o no estaba permitida
     tipo: status >= 500 ? 'servidor' : 'cliente',
     estado: status,
+    // El mensaje que envía DocuMind o, si no hay ninguno, uno genérico con el código
     mensaje: data?.error ?? `Error HTTP ${status}`,
     detalles
   }

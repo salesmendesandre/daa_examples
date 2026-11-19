@@ -6,7 +6,7 @@
     </div>
 
     <!-- Error sin datos que mostrar: mensaje en la propia página -->
-    <MensajeError v-if="error && !data" :error="error" con-reintento @reintentar="recargar" />
+    <MensajeError v-if="error && !data" :error="error" />
 
     <!-- Primera carga: esqueleto con la forma de la tabla -->
     <v-skeleton-loader v-else-if="cargando && !data" type="table-thead, table-tbody" aria-busy="true" />
@@ -45,12 +45,12 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue'
-import { listarDocumentos } from '@/api/documents'
-import { useApi } from '@/composables/useApi'
-import { useAvisos } from '@/composables/useAvisos'
-import { formatearFecha } from '@/utils/formato'
-import EstadoDocumento from '@/components/EstadoDocumento.vue'
-import MensajeError from '@/components/MensajeError.vue'
+import { listarDocumentos } from '../api/documents'
+import { useApi } from '../composables/useApi'
+import { useAvisos } from '../composables/useAvisos'
+import { formatearFecha } from '../utils/formato'
+import EstadoDocumento from '../components/EstadoDocumento.vue'
+import MensajeError from '../components/MensajeError.vue'
 
 // Columnas de la tabla: key es el campo del documento que se muestra (y por el que se ordena)
 const COLUMNAS = [
@@ -78,7 +78,7 @@ const parametros = computed(() => {
 })
 
 // Cada vez que cambian los parámetros se repite la petición
-const { data, error, cargando, recargar } = useApi(() => listarDocumentos(parametros.value), {
+const { data, error, cargando } = useApi(() => listarDocumentos(parametros.value), {
   observar: parametros
 })
 

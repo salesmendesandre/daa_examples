@@ -6,18 +6,18 @@ const routes = [
   {
     path: '/documentos',
     name: 'documentos',
-    component: () => import('@/views/DocumentosView.vue')
+    component: () => import('../views/DocumentosView.vue')
   },
   {
     path: '/documentos/:id',
     name: 'documento-detalle',
-    component: () => import('@/views/DocumentoDetalleView.vue'),
+    component: () => import('../views/DocumentoDetalleView.vue'),
     props: true
   },
   {
     path: '/:pathMatch(.*)*',
     name: 'no-encontrada',
-    component: () => import('@/views/NoEncontradaView.vue')
+    component: () => import('../views/NoEncontradaView.vue')
   }
 ]
 

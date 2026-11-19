@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import ProductosLayout from '@/views/ProductosLayout.vue'
-import ProductoListado from '@/views/ProductoListado.vue'
-import ProductoCrear from '@/views/ProductoCrear.vue'
-import ProductoDetalle from '@/views/ProductoDetalle.vue'
-import ProductoEditar from '@/views/ProductoEditar.vue'
+import ProductosLayout from '../views/ProductosLayout.vue'
+import ProductoListado from '../views/ProductoListado.vue'
+import ProductoCrear from '../views/ProductoCrear.vue'
+import ProductoDetalle from '../views/ProductoDetalle.vue'
+import ProductoEditar from '../views/ProductoEditar.vue'
 
 const routes = [
   {

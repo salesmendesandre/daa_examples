@@ -1,5 +1,5 @@
 <script setup>
-import { useCarritoStore } from '@/stores/carrito'
+import { useCarritoStore } from '../stores/carrito'
 
 const carrito = useCarritoStore()
 </script>
