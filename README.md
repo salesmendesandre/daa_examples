@@ -39,9 +39,10 @@ El código está organizado de forma modular, con un proyecto independiente por 
 | [`21_pinia/`](./21_pinia/) | 21. Pinia | `01`: *store* de un carrito compartido por dos componentes; `02`: el carrito guardado en `localStorage` |
 | [`22_vuetify/`](./22_vuetify/) | 22. Vuetify | Vuetify 4 con `createVuetify`, iconos de Material Design Icons, importación automática con `vite-plugin-vuetify` y `v-snackbar` |
 | [`23_vuetify_forms/`](./23_vuetify_forms/) | 23. Formularios con Vuetify y Zod | `<v-form>` y `<v-text-field>` con `rules`, esquema de Zod 4 y `z.coerce.number()` |
-| [`24_consumir_api/`](./24_consumir_api/) | 24. Consumir la API REST desde Vue | axios, variables de entorno `VITE_`, composable `useApi`, manejo de errores y notas (listar, crear y borrar) en dos vistas de HTML sencillo con Vue Router, sin Vuetify |
-| [`25_tabla_paginada/`](./25_tabla_paginada/) | 25. Listados paginados | Documentos: paginación y orden en el servidor con `v-model` de la tabla, vista de detalle y cola de avisos con `v-snackbar-queue` |
+| [`24_consumir_api/`](./24_consumir_api/) | 24. Consumir la API REST desde Vue | axios, variables de entorno `VITE_`, `normalizarError` y notas (listar, crear y borrar) en dos vistas de HTML sencillo con Vue Router, sin Vuetify |
+| [`25_tabla_paginada/`](./25_tabla_paginada/) | 25. Listados paginados | Documentos en `v-data-table-server`: paginación y orden en el servidor con `v-model` de la tabla y `watch` para repetir la petición |
 | [`backend_documind/`](./backend_documind/) | **Proyecto Final Integrador (DocuMind)** | API REST completa del curso y backend del bloque de Vue: Auth JWT + Roles, MongoDB/Mongoose, subida de PDFs, búsqueda léxica y semántica, RAG con *streaming*, Socket.IO, Zod, OpenAPI/Swagger, Pino y tests con Vitest. Su [`README`](./backend_documind/README.md) explica cómo arrancarlo |
+| [`plantilla_vuetify/`](./plantilla_vuetify/) | Plantilla (sin capítulo) | Proyecto base con Vuetify 4 y Vue Router 5: menú arriba con dos rutas, menú lateral en móvil con `useDisplay()` y vistas que se reorganizan con `v-row` y `v-col` |
 
 ---
 
